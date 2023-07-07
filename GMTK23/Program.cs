@@ -1,4 +1,6 @@
 ﻿using SimulationFramework.Desktop;
 using GMTK23;
+using GMTK23.Scenes.HelloWorld;
 
-GMTKGame.Instance.Run(new DesktopPlatform());
+var game = new GMTKGame(new HelloWorldScene());
+game.Run(new DesktopPlatform());

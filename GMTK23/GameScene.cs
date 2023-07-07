@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SimulationFramework.Drawing;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -36,8 +37,8 @@ internal class GameScene
         }
     }
 
-    public virtual void Render()
+    public virtual void Render(ICanvas canvas)
     {
-        components.ForEach(c => c.Render());
+        components.ForEach(c => c.Render(canvas));
     }
 }
