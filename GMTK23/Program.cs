@@ -30,7 +30,7 @@ partial class Program : Simulation
         Inspector = new();
         SceneViewer = new();
 
-        ReloadLevel("./Levels/test.lvl");
+        ReloadLevel("./Levels/test1.lvl");
         
         // Window.Title = "TANKS!";
         Time.MaxDeltaTime = 1 / 30f;
