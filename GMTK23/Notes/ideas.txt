@@ -1,1 +1,53 @@
 ﻿
+﻿hello
+baller
+
+- 2d side view (terraria style)
+- levels
+- each level is a puzzle trying to sabotage the avatar to prevent the player from refunding the game
+- the avatar is doing some survival game task
+- use a set of godlike abilities in the form of cards
+- you lose if the avatar refunds the game
+
+- mechanics
+	- resource gathering
+		- falling tree
+		- fishing?
+		- mining/digging
+		- foraging/farming
+
+	- weather
+		- fire
+		- rain
+		- wind
+		- storms/lightning
+	- crafting
+	- combat
+		- some spawnable enemy
+	- exploration
+
+- scenarios
+	- player needs to get somewhere high
+	- player will start to build up
+	- you can dispatch of them in different ways
+		- lighting if they have something metallic
+		- can use wind
+
+
+- mvp
+	- 1
+		- basic objects
+			- avatar
+			- tree
+		- avatar interaction
+			- cuts down tree
+	- 2
+		- basic cards
+			- fall
+	- 3
+		- map
+			- tree
+			- cave
+		- more cards 
+			- spontaneous combustion
+			- make wet (use on clouds for rain)
