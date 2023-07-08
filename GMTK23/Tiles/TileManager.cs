@@ -17,9 +17,10 @@ internal class TileManager
 
     private TileManager()
     {
-        Add(new SolidTile(Color.Red));
-        Add(new SolidTile(Color.Blue));
+        Add(new SolidTile(Color.Gray));
         Add(new SolidTile(Color.Green));
+        Add(new SolidTile(Color.Blue));
+        Add(new SolidTile(Color.Black));
     }
 
     public void Add(Tile tile)
