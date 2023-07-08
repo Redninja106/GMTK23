@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Genbox.VelcroPhysics" Version="0.1.0-alpha.2" />
+    <PackageReference Include="SimulationFramework" Version="0.2.0-beta.4" />
+    <PackageReference Include="SimulationFramework.Desktop" Version="0.2.0-beta.4" />
+    <PackageReference Include="SimulationFramework.SkiaSharp" Version="0.2.0-beta.4" />
+    <PackageReference Include="Sprache" Version="2.3.1" />
+  </ItemGroup>
+
+</Project>

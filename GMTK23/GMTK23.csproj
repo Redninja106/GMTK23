@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\GMTK23.Engine\GMTK23.Engine.csproj" />
     <ProjectReference Include="..\SimulationFramework.AudioExtensions\SimulationFramework.AudioExtensions.csproj" />
   </ItemGroup>
 

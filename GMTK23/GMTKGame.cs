@@ -40,10 +40,17 @@ class GMTKGame : Simulation
             ActiveScene = nextScene;
         }
 
+        LayoutDebugWindows();
+        ActiveScene.Update();
+
         canvas.ResetState();
         canvas.Clear(Color.FromHSV(0, 0, .1f));
-
-        ActiveScene.Update();
         ActiveScene.Render(canvas);
+    }
+
+    private void LayoutDebugWindows()
+    {
+        SceneViewer.Layout();
+        Inspector.Layout();
     }
 }
