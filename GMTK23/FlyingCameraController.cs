@@ -31,7 +31,7 @@ internal class FlyingCameraController : IGameComponent
         if (Keyboard.IsKeyDown(Key.LeftShift))
             speed = 5;
 
-        Program.Camera.Transform.Position += speed *  delta * 5 * Time.DeltaTime;
+        Program.Camera.Transform.Position += speed * delta * 5 * Time.DeltaTime;
 
         zoom += Mouse.ScrollWheelDelta;
 
