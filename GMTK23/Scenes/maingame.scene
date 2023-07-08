@@ -1,5 +1,0 @@
-﻿using Avatar = "./Components/Avatar/avatar.arch"
-using Player = "./Components/Player/player.arch"
-
-Player
-Avatar

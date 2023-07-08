@@ -3,42 +3,67 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GMTK23;
+using GMTK23.Extensions;
 
 namespace GMTK23.Tiles;
-internal class TileMapEditor
+internal class TileMapEditor : IGameComponent, ISaveable
 {
-    public TileMap TileMap { get; }
+    public TileMap TileMap { get; private set; }
+    public Tile SelectedTile { get; private set; }
 
-    public TileMapEditor(TileMap tileMap)
+    public bool IsGridVisible { get; set; } = true;
+
+    public RenderLayer RenderLayer => RenderLayer.Interactables;
+
+    public TileMapEditor()
     {
-        this.TileMap = tileMap;
     }
 
     public void Update()
     {
+        TileMap ??= Program.World.Components.OfType<TileMap>().First();
+
         if (ImGui.Begin("Tiles"))
         {
+            foreach (var tile in TileManager.Instance.Tiles)
+            {
+                if (ImGui.Button($"{tile} (id {tile.ID})"))
+                {
+                    SelectedTile = tile;
+                }
+            }
         }
         ImGui.End();
 
-        Vector2 localMousePos = TileMap.Transform.WorldToLocal(Vector2.Zero);
+        var mousePos = Program.Camera.ScreenToWorld(Mouse.Position);
+        Vector2 localMousePos = TileMap.Transform.WorldToLocal(mousePos);
         int gridCellX = (int)localMousePos.X;
         int gridCellY = (int)localMousePos.Y;
 
         if (Mouse.IsButtonDown(MouseButton.Left))
         {
-            TileMap[gridCellX, gridCellY] = TileManager.Instance.Tiles.First();
+            TileMap[gridCellX, gridCellY] = SelectedTile;
+        }
+        if (Mouse.IsButtonDown(MouseButton.Right))
+        {
+            TileMap[gridCellX, gridCellY] = null;
         }
     }
 
     public void Render(ICanvas canvas)
     {
-        var mousePos = Vector2.Zero;
+        TileMap ??= Program.World.Components.OfType<TileMap>().First();
+
+        if (!IsGridVisible)
+            return;
+
+        var mousePos = Program.Camera.ScreenToWorld(Mouse.Position);
         Vector2 localMousePos = TileMap.Transform.WorldToLocal(mousePos);
         int gridCellX = (int)localMousePos.X;
         int gridCellY = (int)localMousePos.Y;
 
-        TileMap.Transform.ApplyTo(canvas);
+        canvas.ApplyTransform(TileMap.Transform);
 
         for (int y = 0; y < TileMap.Height; y++)
         {
@@ -46,7 +71,7 @@ internal class TileMapEditor
             {
                 if (x == gridCellX && y == gridCellY)
                 {
-                    canvas.Fill(Color.Red);
+                    canvas.Stroke(Color.Red);
                 }
                 else
                 {
@@ -56,5 +81,15 @@ internal class TileMapEditor
                 canvas.DrawRect(x, y, 1, 1);
             }
         }
+    }
+
+    public IEnumerable<string> Save()
+    {
+        yield break;
+    }
+
+    public static IGameComponent Load(string[] args)
+    {
+        return new TileMapEditor();
     }
 }

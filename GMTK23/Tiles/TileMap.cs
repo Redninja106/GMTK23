@@ -5,13 +5,16 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace GMTK23.Tiles;
-internal class TileMap : Entity
+internal class TileMap : IGameComponent, ISaveable
 {
     public int Width { get; }
     public int Height { get; }
-    public Transform Transform { get; }
 
     private Tile?[] tiles;
+
+    public RenderLayer RenderLayer => RenderLayer.Interactables;
+
+    public Transform Transform;
 
     public TileMap(Transform transform, int width, int height)
     {
@@ -24,7 +27,7 @@ internal class TileMap : Entity
 
     public void Render(ICanvas canvas)
     {
-        Transform.ApplyTo(canvas);
+        canvas.ApplyTransform(Transform);
         // we render bottom up
         for (int y = Height - 1; y > 0; y--)
         {
@@ -42,7 +45,39 @@ internal class TileMap : Entity
 
     public void Update()
     {
+    }
 
+    public IEnumerable<string> Save()
+    {
+        yield return Transform.ToString()!;
+        yield return Width.ToString();
+        yield return Height.ToString();
+
+        foreach (var tile in tiles)
+        {
+            yield return (tile?.ID ?? 0).ToString();
+        }
+    }
+
+    public static IGameComponent Load(string[] args)
+    {
+        int pos = 0;
+        var transform = Transform.Parse(args[pos++]);
+        var width = int.Parse(args[pos++]);
+        var height = int.Parse(args[pos++]);
+
+        var result = new TileMap(transform, width, height);
+
+        if (args.Length > 3) 
+        {
+            for (int i = 0; i < width * height; i++)
+            {
+                int id = int.Parse(args[pos++]);
+                result.tiles[i] = TileManager.Instance.FromID(id);
+            }
+        }
+
+        return result;
     }
 
     public ref Tile? this[int x, int y]

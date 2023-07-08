@@ -1,11 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Levels\**\*.lvl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="SimulationFramework" Version="0.2.0-beta.4" />
@@ -13,20 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GMTK23.Engine\GMTK23.Engine.csproj" />
     <ProjectReference Include="..\SimulationFramework.AudioExtensions\SimulationFramework.AudioExtensions.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="Scenes\**\*.*">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
-  	<None Update="**\*.arch">
-  	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-  	</None>
   </ItemGroup>
 	
 </Project>

@@ -19,10 +19,19 @@ internal class TileManager
     {
         Add(new SolidTile(Color.Red));
         Add(new SolidTile(Color.Blue));
+        Add(new SolidTile(Color.Green));
     }
 
     public void Add(Tile tile)
     {
         Tiles.Add(tile);
+    }
+
+    public Tile? FromID(int id)
+    {
+        if (id is 0)
+            return null;    
+
+        return Tiles.Single(t => t.ID == id);
     }
 }
