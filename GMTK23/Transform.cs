@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.Intrinsics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,6 +11,7 @@ internal struct Transform
 {
     public Vector2 Position;
     public float Rotation;
+    public Vector2 Scale;
 
     public Transform(float x, float y, float rotation) : this(new(x, y), rotation)
     {
@@ -19,6 +21,7 @@ internal struct Transform
     {
         Position = position;
         Rotation = rotation;
+        Scale = Vector2.One;
     }
 
     public Vector2 Forward
@@ -52,12 +55,22 @@ internal struct Transform
         return this with { Rotation = this.Rotation + rotation };
     }
 
-    internal Vector2 WorldToLocal(Vector2 point)
+    public Vector2 WorldToLocal(Vector2 point)
     {
-        var matrix = Matrix3x2.CreateRotation(-this.Rotation);
+        var matrix = Matrix3x2.CreateScale(Vector2.One / this.Scale);
+        matrix = matrix.Append(Matrix3x2.CreateRotation(-this.Rotation));
         matrix = matrix.Append(Matrix3x2.CreateTranslation(-this.Position));
         return Vector2.Transform(point, matrix);
     }
+
+    public Vector2 LocalToWorld(Vector2 point)
+    {
+        var matrix = Matrix3x2.CreateTranslation(this.Position);
+        matrix = matrix.Append(Matrix3x2.CreateRotation(this.Rotation));
+        matrix = matrix.Append(Matrix3x2.CreateScale(this.Scale));
+        return Vector2.Transform(point, matrix);
+    }
+
 
     public override string ToString()
     {

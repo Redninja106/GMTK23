@@ -41,6 +41,11 @@ internal class TileMapEditor : IGameComponent, ISaveable
         int gridCellX = (int)localMousePos.X;
         int gridCellY = (int)localMousePos.Y;
 
+        if (gridCellX < 0 || gridCellX >= this.TileMap.Width)
+            return;
+        if (gridCellY < 0 || gridCellY >= this.TileMap.Height)
+            return;
+
         if (Mouse.IsButtonDown(MouseButton.Left))
         {
             TileMap[gridCellX, gridCellY] = SelectedTile;

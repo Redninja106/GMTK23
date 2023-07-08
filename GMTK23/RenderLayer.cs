@@ -12,5 +12,6 @@ internal enum RenderLayer
     Interactables,
     Avatar,
     Particles,
+    Cards,
     UI,
 }

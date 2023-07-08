@@ -27,7 +27,6 @@ partial class Program : Simulation
         // Application.RegisterComponent<WindowsAudioProvider>(new());
 
         Camera = new(15);
-        Camera.Transform.Rotation = MathF.PI / 2f;
         Inspector = new();
         SceneViewer = new();
 
