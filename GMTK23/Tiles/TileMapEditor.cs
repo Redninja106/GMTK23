@@ -21,8 +21,7 @@ internal class TileMapEditor
         }
         ImGui.End();
 
-        var mousePos = GameScene.Active.Camera.ScreenToWorld(Mouse.Position);
-        Vector2 localMousePos = TileMap.Transform.WorldToLocal(mousePos);
+        Vector2 localMousePos = TileMap.Transform.WorldToLocal(Vector2.Zero);
         int gridCellX = (int)localMousePos.X;
         int gridCellY = (int)localMousePos.Y;
 
@@ -34,7 +33,7 @@ internal class TileMapEditor
 
     public void Render(ICanvas canvas)
     {
-        var mousePos = GameScene.Active.Camera.ScreenToWorld(Mouse.Position);
+        var mousePos = Vector2.Zero;
         Vector2 localMousePos = TileMap.Transform.WorldToLocal(mousePos);
         int gridCellX = (int)localMousePos.X;
         int gridCellY = (int)localMousePos.Y;

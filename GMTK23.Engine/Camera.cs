@@ -22,6 +22,8 @@ public class Camera : Component
 
     public bool HorizontalAnchor { get; set; } = false;
 
+    public Color ClearColor { get; set; } = Color.FromHSV(0, 0, .1f);
+
     public float VerticalSize
     {
         get => verticalSize;

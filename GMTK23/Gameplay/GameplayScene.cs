@@ -5,18 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GMTK23.Scenes.GameplayScene;
-internal class GameplayScene : GameScene
-{
-    public GameplayScene() : base(new Camera(20))
-    {
-        AddComponent(
-            new World(new(0, -5, 0)),
-            new Avatar(new(0, -4, 0)),
-            new Tree(new(10, -5, 0))
-            );
-    }
-}
+namespace GMTK23.Gameplay;
 
 class World : Entity
 {
@@ -31,7 +20,7 @@ class World : Entity
 
     public World(Transform transform)
     {
-        this.Transform = transform;
+        Transform = transform;
     }
 
     public void Render(ICanvas canvas)
@@ -59,8 +48,8 @@ class WorldSegment
 
     public WorldSegment(float leftHeight, float rightHeight)
     {
-        this.LeftHeight = leftHeight;
-        this.RightHeight = rightHeight;
+        LeftHeight = leftHeight;
+        RightHeight = rightHeight;
     }
 
     public void Render(ICanvas canvas)
@@ -74,4 +63,4 @@ class WorldSegment
 
         canvas.DrawPolygon(poly);
     }
-} 
+}

@@ -56,7 +56,7 @@ internal class SceneViewer : DebugWindow
 
     private void TextEntry(string name, Component component)
     {
-        ImGui.Text(name);
+        ImGui.Text("  " + name);
         SelectButton(component);
     }
 

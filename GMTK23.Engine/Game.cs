@@ -36,10 +36,11 @@ public class Game : Simulation
 
     public override void OnRender(ICanvas canvas)
     {
+        canvas.ResetState();
+
         DebugWindow.LayoutAll();
 
         canvas.StrokeWidth(0);
-        canvas.Clear(Color.Black);
 
         Camera.Main?.SetDisplaySize(canvas.Width, canvas.Height);
         Camera.Active = Camera.Main!;
@@ -49,7 +50,8 @@ public class Game : Simulation
 
         if (Camera.Active is not null)
         {
-            Camera.Active?.ApplyTo(canvas);
+            Camera.Active.ApplyTo(canvas);
+            canvas.Clear(Camera.Active.ClearColor);
 
             Scene!.Render(canvas);
         }

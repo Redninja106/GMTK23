@@ -4,8 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GMTK23;
-internal interface ICollidable : Entity
+namespace GMTK23.Engine;
+internal enum RenderLayer
 {
-    Rectangle GetCollider();
 }
