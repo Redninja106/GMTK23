@@ -7,11 +7,15 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace GMTK23;
-internal struct Transform
+internal record class Transform
 {
     public Vector2 Position;
     public float Rotation;
     public Vector2 Scale;
+
+    public Transform() : this(0, 0, 0)
+    {
+    }
 
     public Transform(float x, float y, float rotation) : this(new(x, y), rotation)
     {
@@ -24,12 +28,11 @@ internal struct Transform
         Scale = Vector2.One;
     }
 
-    public Vector2 Forward
+    public Vector2 Right
     { 
         get => Vector2.UnitX.Rotated(Rotation); 
-        set => Rotation = MathF.Atan2(value.Y, value.X); 
     }
-    public Vector2 Backward
+    public Vector2 Left
     {
         get => (-Vector2.UnitX).Rotated(Rotation);
     }
@@ -84,5 +87,19 @@ internal struct Transform
         float y = float.Parse(parts[1]);
         float r = float.Parse(parts[2]);
         return new(x, y, r);
+    }
+
+    public void Match(Transform other)
+    {
+        this.Position = other.Position;
+        this.Rotation = other.Rotation;
+        this.Scale = other.Scale;
+    }
+
+    public void LerpTowards(Transform other, float t)
+    {
+        this.Position = Vector2.Lerp(this.Position, other.Position, t);
+        this.Rotation = MathHelper.Lerp(this.Rotation, other.Rotation, t);
+        this.Scale = Vector2.Lerp(this.Scale, other.Scale, t);
     }
 }

@@ -5,7 +5,7 @@ class SpriteTile : Tile
     public ITexture texture;
     public Rectangle sourceBounds;
 
-    public SpriteTile(ITexture texture, Rectangle sourceBounds)
+    public SpriteTile(int id, ITexture texture, Rectangle sourceBounds) : base(id)
     {
         this.texture = texture;
         this.sourceBounds = sourceBounds;

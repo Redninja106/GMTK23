@@ -1,110 +1,113 @@
-﻿//using System;
-//using System.Collections.Generic;
-//using System.Linq;
-//using System.Text;
-//using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-//namespace GMTK23.Cards;
+namespace GMTK23.Cards;
 
-//internal class PlayerHand
-//{
-//    public List<InteractableCard> Cards { get; set; }
-//    Transform Transform { get; set; }
+internal class PlayerHand : IGameComponent
+{
+    public List<InteractableCard> Cards { get; set; }
+    public Transform Transform { get; } = new();
 
-//    public PlayerHand(IEnumerable<InteractableCard> cards)
-//    {
-//        this.Cards = new(cards);
-//    }
+    public PlayerHand()
+    {
+    }
 
-//    float offset = .4f;
-//    float radius = 2f;
-//    float breadthStrength = 1.05f;
-//    float breadthUpper = Angle.ToRadians(90f);
-//    float breadthLower = Angle.ToRadians(10f);
+    public float offset = .4f;
+    public float radius = 2f;
+    public float breadthStrength = 1.05f;
+    public float breadthUpper = Angle.ToRadians(90f);
+    public float breadthLower = Angle.ToRadians(10f);
+    public float scale = 1f;
 
-//    public event Action<InteractableCard>? OnCardSelected;
-//    public bool SelectionEnabled { get; set; }
+    public event Action<InteractableCard>? OnCardSelected;
+    public bool SelectionEnabled { get; set; } = true;
 
-//    public InteractableCard? SelectedCard { get; private set; }
+    public InteractableCard? SelectedCard { get; private set; }
+    public RenderLayer RenderLayer => RenderLayer.Cards;
 
-//    public void Render(ICanvas canvas)
-//    {
-//        foreach (var card in Cards)
-//        {
-//            card.Render(canvas);
-//        }
+    public void Render(ICanvas canvas)
+    {
+    }
 
-//        // canvas.Stroke(Color.Purple);
-//        // canvas.DrawCircle(Position.X, Position.Y-offset+radius, radius);
-//    }
+    public void Update()
+    {
+        Cards ??= Program.World.FindAll<InteractableCard>().ToList();
 
-//    public void Update()
-//    {
-//        float breadth = breadthUpper - (breadthUpper - breadthLower) / MathF.Pow(breadthStrength, (Cards.Count - 2));
-//        float increment = (breadth / Cards.Count);
-//        float baseAngle = (increment - breadth) / 2f - (MathF.PI / 2f);
+        float breadth = breadthUpper - (breadthUpper - breadthLower) / MathF.Pow(breadthStrength, (Cards.Count - 2));
+        float increment = (breadth / Cards.Count);
+        float baseAngle = (increment - breadth) / 2f - (MathF.PI / 2f);
 
-//        var mousePosition = Camera..ScreenToWorld(Mouse.Position);
-//        this.SelectedCard = GetCard(mousePosition);
-//        var selectedCardIndex = (SelectedCard is null || (!SelectionEnabled)) ? -1 : Cards.IndexOf(SelectedCard);
+        var mousePosition = Program.Camera.ScreenToWorld(Mouse.Position);
+        this.SelectedCard = GetCard(mousePosition);
+        var selectedCardIndex = (SelectedCard is null || (!SelectionEnabled)) ? -1 : Cards.IndexOf(SelectedCard);
 
-//        for (int i = 0; i < Cards.Count; i++)
-//        {
-//            var card = Cards[i];
+        for (int i = 0; i < Cards.Count; i++)
+        {
+            var card = Cards[i];
 
-//            float angle = this.Rotation + baseAngle + i * increment;
+            if (card.isDragging)
+                continue;
 
-//            if (selectedCardIndex is not -1 && selectedCardIndex != (Cards.Count - 1))
-//            {
-//                float diff = (increment / -2f) + Scale * Angle.ToRadians(12.5f / radius);
+            float angle = this.Transform.Rotation + baseAngle + i * increment;
 
-//                if (i <= selectedCardIndex)
-//                {
-//                    angle -= diff;
-//                }
-//                else
-//                {
-//                    angle += diff;
-//                }
-//            }
+            if (selectedCardIndex is not -1 && selectedCardIndex != (Cards.Count - 1))
+            {
+                float diff = (increment / -2f) + scale * Angle.ToRadians(12.5f / radius);
 
-//            card.TargetPosition = this.Position + Scale * (Vector2.UnitY * (radius - offset) + Angle.ToVector(angle) * radius);
-//            card.TargetRotation = angle + (MathF.PI / 2f);
-//            card.TargetScale = this.Scale;
+                if (i <= selectedCardIndex)
+                {
+                    angle -= diff;
+                }
+                else
+                {
+                    angle += diff;
+                }
+            }
 
-//            if (SelectionEnabled && card == SelectedCard)
-//            {
-//                card.TargetScale *= 1.20f;
-//                card.TargetPosition += Angle.ToVector(angle) * .15f * Scale;
-//            }
+            card.TargetTransform.Position = this.Transform.Position + scale * (Vector2.UnitY * (radius - offset) + Angle.ToVector(angle) * radius);
+            card.TargetTransform.Rotation = angle + (MathF.PI / 2f);
+            card.TargetTransform.Scale = new(scale, scale);
 
+            if (SelectionEnabled && card == SelectedCard)
+            {
+                card.TargetTransform.Scale *= 1.20f;
+                card.TargetTransform.Position += Angle.ToVector(angle) * .15f * scale;
+            }
 
-//            card.Update();
-//        }
+            card.Update();
+        }
 
-//        if (SelectedCard is not null && SelectionEnabled && Mouse.IsButtonPressed(MouseButton.Left))
-//        {
-//            this.OnCardSelected?.Invoke(SelectedCard);
-//        }
-//    }
+        if (SelectedCard is not null && SelectionEnabled && Mouse.IsButtonPressed(MouseButton.Left))
+        {
+            this.OnCardSelected?.Invoke(SelectedCard);
+        }
+    }
 
-//    public InteractableCard? GetCard(Vector2 worldSpacePoint)
-//    {
-//        // cards are stored left to right, and a card is always on top of the card to its left.
-//        // we can assume that if we test the cards in reverse order, the first success will be the topmost card.
+    public InteractableCard? GetCard(Vector2 worldSpacePoint)
+    {
+        // cards are stored left to right, and a card is always on top of the card to its left.
+        // we can assume that if we test the cards in reverse order, the first success will be the topmost card.
 
-//        for (int i = Cards.Count - 1; i >= 0; i--)
-//        {
-//            if (Cards[i].ContainsPoint(worldSpacePoint) ||
-//                Cards[i].ContainsPoint(worldSpacePoint, Vector2.UnitY * -1f))
-//                return Cards[i];
-//        }
+        for (int i = Cards.Count - 1; i >= 0; i--)
+        {
+            if (Cards[i].ContainsPoint(worldSpacePoint) ||
+                Cards[i].ContainsPoint(worldSpacePoint, Vector2.UnitY * -1f))
+                return Cards[i];
+        }
 
-//        return null;
-//    }
+        return null;
+    }
 
-//    // public InteractableCard? GetCard(Card card)
-//    // {
-//    //     return Cards.FirstOrDefault(c => c.Card.ID == card.ID);
-//    // }
-//}
+    public void Initalize()
+    {
+
+    }
+
+    // public InteractableCard? GetCard(Card card)
+    // {
+    //     return Cards.FirstOrDefault(c => c.Card.ID == card.ID);
+    // }
+}

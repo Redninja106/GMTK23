@@ -15,7 +15,7 @@ internal class Camera
     public readonly MatrixBuilder WorldToLocal = new();
     public readonly MatrixBuilder LocalToScreen = new();
 
-    public Transform Transform;
+    public Transform Transform { get; } = new();
 
     public float AspectRatio { get; private set; }
 

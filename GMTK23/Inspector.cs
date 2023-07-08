@@ -46,11 +46,19 @@ internal class Inspector
             return;
         }
 
-
         Type type = obj.GetType();
 
-        if (ImGui.TreeNode(name is null ? obj.ToString() : $"{name}: {obj}"))
+        if (ImGui.TreeNode(name is null ? obj.ToString() : $"{name}: {obj}###{name}"))
         {
+            if (obj is IGameComponent)
+            {
+                ImGui.SameLine();
+                if (ImGui.SmallButton("Select"))
+                {
+                    Select(obj);
+                }
+            }
+
             var members = type.GetMembers(BindingFlags.Instance | BindingFlags.Public);
 
             foreach (var member in members)
@@ -103,6 +111,11 @@ internal class Inspector
                 if (!isReadonly)
                     fieldInfo.SetValue(obj, vec2Value);
                 return;
+            case Color colValue:
+                colValue = LayoutColor(name, isReadonly, colValue);
+                if (!isReadonly)
+                    fieldInfo.SetValue(obj, colValue);
+                return;
             case IEnumerable enumerable:
                 LayoutEnumerable(name, enumerable);
                 return;
@@ -112,55 +125,61 @@ internal class Inspector
         }
     }
 
+    private Color LayoutColor(string name, bool isReadonly, Color colValue)
+    {
+        Vector4 col = colValue.AsVector4();
+        ImGui.ColorEdit4(name, ref col);
+        return new Color(col);
+    }
+
     private void LayoutProperty(PropertyInfo fieldInfo, object obj)
     {
         if (!fieldInfo.CanRead)
             return;
 
-        try
+        var name = fieldInfo.Name;
+        
+        if (name == "Item")
         {
-            var name = fieldInfo.Name;
-            var isReadonly = !fieldInfo.CanWrite;
-            var value = fieldInfo.GetValue(obj);
-
-            switch (value)
-            {
-                case float floatValue:
-                    floatValue = LayoutFloat(name, isReadonly, floatValue);
-                    if (!isReadonly)
-                        fieldInfo.SetValue(obj, floatValue);
-                    return;
-                case bool boolValue:
-                    boolValue = LayoutBool(name, isReadonly, boolValue);
-                    if (!isReadonly)
-                        fieldInfo.SetValue(obj, boolValue);
-                    return;
-                case int intValue:
-                    intValue = LayoutInt(name, isReadonly, intValue);
-                    if (!isReadonly)
-                        fieldInfo.SetValue(obj, intValue);
-                    return;
-                case Vector2 vec2Value:
-                    vec2Value = LayoutVector2(name, isReadonly, vec2Value);
-                    if (!isReadonly)
-                        fieldInfo.SetValue(obj, vec2Value);
-                    return;
-                case IEnumerable enumerable:
-                    LayoutEnumerable(name, enumerable);
-                    return;
-                case Enum @enum:
-                    @enum = LayoutEnum(name, @enum);
-                    if (!isReadonly)
-                        fieldInfo.SetValue(obj, @enum);
-                    return;
-                default:
-                    LayoutObject(value, name);
-                    break;
-            }
+            return;
         }
-        catch
-        {
 
+        var isReadonly = !fieldInfo.CanWrite;
+        var value = fieldInfo.GetValue(obj);
+
+        switch (value)
+        {
+            case float floatValue:
+                floatValue = LayoutFloat(name, isReadonly, floatValue);
+                if (!isReadonly)
+                    fieldInfo.SetValue(obj, floatValue);
+                return;
+            case bool boolValue:
+                boolValue = LayoutBool(name, isReadonly, boolValue);
+                if (!isReadonly)
+                    fieldInfo.SetValue(obj, boolValue);
+                return;
+            case int intValue:
+                intValue = LayoutInt(name, isReadonly, intValue);
+                if (!isReadonly)
+                    fieldInfo.SetValue(obj, intValue);
+                return;
+            case Vector2 vec2Value:
+                vec2Value = LayoutVector2(name, isReadonly, vec2Value);
+                if (!isReadonly)
+                    fieldInfo.SetValue(obj, vec2Value);
+                return;
+            case IEnumerable enumerable:
+                LayoutEnumerable(name, enumerable);
+                return;
+            case Enum @enum:
+                @enum = LayoutEnum(name, @enum);
+                if (!isReadonly)
+                    fieldInfo.SetValue(obj, @enum);
+                return;
+            default:
+                LayoutObject(value, name);
+                break;
         }
     }
 

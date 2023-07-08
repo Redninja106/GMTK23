@@ -14,6 +14,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Levels\cards.lvl" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="SimulationFramework" Version="0.2.0-beta.4" />
     <PackageReference Include="SimulationFramework.Desktop" Version="0.2.0-beta.4" />
   </ItemGroup>

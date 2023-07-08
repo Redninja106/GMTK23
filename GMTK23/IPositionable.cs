@@ -7,5 +7,5 @@ using System.Threading.Tasks;
 namespace GMTK23;
 internal interface IPositionable
 {
-    ref Transform Transform { get; }
+    Transform Transform { get; }
 }

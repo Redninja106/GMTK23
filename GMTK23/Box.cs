@@ -12,11 +12,9 @@ internal class Box : IGameComponent, ICollider, ISaveable
 {
     public bool IsStatic => true;
 
-    Transform transform;
+    public Transform Transform { get; private set; }
     float width, height;
-    Color color = Color.White;
-
-    public float Strength { get; }
+    public Color color = Color.Parse("#c7986b");
 
     public Box(float x, float y, float r, float width, float height) : this(new(x, y, r), width, height)
     {
@@ -26,15 +24,15 @@ internal class Box : IGameComponent, ICollider, ISaveable
 
     public Box(Transform transform, float width, float height)
     {
-        this.transform = transform;
+        this.Transform = transform;
         this.width = width;
         this.height = height;
     }
 
     public void Render(ICanvas canvas)
     {
-        canvas.ApplyTransform(transform);
-        canvas.Fill(Color.Parse("#c7986b"));
+        canvas.ApplyTransform(Transform);
+        canvas.Fill(color);
         canvas.DrawRect(0, 0, width, height, Alignment.Center);
     }
 
@@ -57,12 +55,12 @@ internal class Box : IGameComponent, ICollider, ISaveable
         Program.World.Remove(this);
     }
 
-    public static IGameComponent Load(string[] args)
+    public static IGameComponent Load(ArgReader reader)
     {
-        var x = float.Parse(args[0]);
-        var y = float.Parse(args[1]);
-        var w = float.Parse(args[2]);
-        var h = float.Parse(args[3]);
+        var x = reader.NextFloat();
+        var y = reader.NextFloat();
+        var w = reader.NextFloat();
+        var h = reader.NextFloat();
 
         return new Box(x, y, 0, w, h);
     }
@@ -75,7 +73,9 @@ internal class Box : IGameComponent, ICollider, ISaveable
         yield return height.ToString();
     }
 
-    public ref Transform Transform => ref this.transform;
+    public void Initalize()
+    {
+    }
 
     public RenderLayer RenderLayer => RenderLayer.World;
 }

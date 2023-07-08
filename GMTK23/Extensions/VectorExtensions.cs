@@ -13,4 +13,15 @@ internal static class VectorExtensions
         var (s, c) = MathF.SinCos(rotation);
         return new(vector.X * c - vector.Y * s, vector.X * s + vector.Y * c);
     }
+
+
+    public static Vector2 StepTowards(this Vector2 vector, Vector2 target, float amount)
+    {
+        float distance = Vector2.Distance(vector, target);
+
+        if (distance < amount)
+            return target;
+
+        return (target - vector).Normalized() * amount;
+    }
 }

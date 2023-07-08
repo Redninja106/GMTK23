@@ -2,8 +2,12 @@
 
 abstract class Tile
 {
-    private static int nextID = 1;
+    public int ID { get; }
 
-    public int ID { get; } = nextID++;
+    public Tile(int id)
+    {
+        this.ID = id;
+    }
+
     public abstract void Render(ICanvas canvas, Rectangle bounds);
 }

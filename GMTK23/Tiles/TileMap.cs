@@ -16,13 +16,27 @@ internal class TileMap : IGameComponent, ISaveable
 
     public Transform Transform;
 
-    public TileMap(Transform transform, int width, int height)
+    public TileMap(int width, int height)
     {
-        this.Transform = transform;
+        this.Transform = new();
         this.Width = width;
         this.Height = height;
 
         tiles = new Tile?[width * height];
+    }
+
+    [Button]
+    public void Edit()
+    {
+        var mapEditor = Program.World.Find<TileMapEditor>();
+
+        if (mapEditor is null)
+        {
+            Console.WriteLine("No TileMapEditor is present!");
+            return;
+        }
+
+        mapEditor.Select(this);
     }
 
     public void Render(ICanvas canvas)
@@ -59,25 +73,29 @@ internal class TileMap : IGameComponent, ISaveable
         }
     }
 
-    public static IGameComponent Load(string[] args)
+    public static IGameComponent Load(ArgReader reader)
     {
-        int pos = 0;
-        var transform = Transform.Parse(args[pos++]);
-        var width = int.Parse(args[pos++]);
-        var height = int.Parse(args[pos++]);
+        var transform = reader.NextTransform();
+        var width = reader.NextInt();
+        var height = reader.NextInt();
 
-        var result = new TileMap(transform, width, height);
+        var result = new TileMap(width, height);
+        result.Transform = transform;
 
-        if (args.Length > 3) 
+        if (reader.CountRemaining > 0) 
         {
             for (int i = 0; i < width * height; i++)
             {
-                int id = int.Parse(args[pos++]);
+                int id = reader.NextInt();
                 result.tiles[i] = TileManager.Instance.FromID(id);
             }
         }
 
         return result;
+    }
+
+    public void Initalize()
+    {
     }
 
     public ref Tile? this[int x, int y]

@@ -21,7 +21,7 @@ partial class Program : Simulation
     public static Vector2 MousePosition { get; private set; }
     public static Inspector Inspector { get; private set; }
     public static SceneViewer SceneViewer { get; private set; }
-     
+    
     public override void OnInitialize()
     {
         // Application.RegisterComponent<WindowsAudioProvider>(new());
@@ -30,7 +30,7 @@ partial class Program : Simulation
         Inspector = new();
         SceneViewer = new();
 
-        ReloadLevel("./Levels/test1.lvl");
+        ReloadLevel("./Levels/cave.lvl");
         
         // Window.Title = "TANKS!";
         Time.MaxDeltaTime = 1 / 30f;
@@ -58,7 +58,7 @@ partial class Program : Simulation
 
         Camera.Update(canvas.Width, canvas.Height);
 
-        canvas.Antialias(true);
+        canvas.Antialias(false);
 
         canvas.PushState();
         Camera.ApplyTo(canvas);

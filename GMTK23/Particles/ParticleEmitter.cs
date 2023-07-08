@@ -8,9 +8,8 @@ using System.Threading.Tasks;
 namespace GMTK23.Particles;
 internal class ParticleEmitter : IPositionable
 {
-    public ref Transform Transform => ref transform;
+    public Transform Transform { get; } = new();
 
-    public Transform transform;
     public Vector2 Velocity;
     public float AngularVelocity;
 

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace GMTK23;
 internal class LevelReader
 {
-    private static Dictionary<string, Func<string[], IGameComponent>> loaders = new();
+    private static Dictionary<string, Func<ArgReader, IGameComponent>> loaders = new();
 
     static LevelReader()
     {
@@ -28,7 +28,7 @@ internal class LevelReader
 
         foreach (var type in types)
         {
-            loaders.Add(type.Name, type.GetMethod("Load")!.CreateDelegate<Func<string[], IGameComponent>>());
+            loaders.Add(type.Name, type.GetMethod("Load")!.CreateDelegate<Func<ArgReader, IGameComponent>>());
             Console.WriteLine($"{type.Name} added");
         }
     }
@@ -43,12 +43,12 @@ internal class LevelReader
 
             if (loaders.TryGetValue(parts[0], out var factory))
             {
-                yield return factory(parts[1..]);
+                yield return factory(new ArgReader(parts[1..]));
             }
             else if (Assembly.GetExecutingAssembly().GetTypes().FirstOrDefault(t => t.Name == parts[0]) is not null)
             {
                 var type = Assembly.GetExecutingAssembly().GetTypes().FirstOrDefault(t => t.Name == parts[0]);
-                yield return (IGameComponent)Activator.CreateInstance(type);
+                yield return (IGameComponent)Activator.CreateInstance(type)!;
             }
             else
             {

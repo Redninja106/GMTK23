@@ -7,7 +7,15 @@ class SolidTile : Tile
     public Color Color { get; }
     private string? desc = null;
 
-    public SolidTile(Color color, [CallerArgumentExpression(nameof(color))] string? expr = null)
+    public int Prop
+    {
+        get
+        {
+            return 0;
+        }
+    }
+
+    public SolidTile(int id, Color color, [CallerArgumentExpression(nameof(color))] string? expr = null) : base(id)
     {
         this.Color = color;
         desc = expr;

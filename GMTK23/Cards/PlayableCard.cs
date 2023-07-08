@@ -18,5 +18,5 @@ internal abstract class PlayableCard
         Description = description;
     }
 
-    public abstract void Interact(ICardInteractable interableObject);
+    public abstract void Interact(IInteractable interableObject);
 }

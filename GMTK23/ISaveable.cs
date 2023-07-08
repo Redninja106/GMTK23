@@ -8,5 +8,5 @@ namespace GMTK23;
 internal interface ISaveable
 {
     IEnumerable<string> Save();
-    static abstract IGameComponent Load(string[] args);
+    static abstract IGameComponent Load(ArgReader reader);
 }

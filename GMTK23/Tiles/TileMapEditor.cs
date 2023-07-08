@@ -7,24 +7,30 @@ using GMTK23;
 using GMTK23.Extensions;
 
 namespace GMTK23.Tiles;
-internal class TileMapEditor : IGameComponent, ISaveable
+internal class TileMapEditor : IGameComponent
 {
-    public TileMap TileMap { get; private set; }
+    public TileMap? TileMap { get; private set; }
     public Tile SelectedTile { get; private set; }
 
     public bool IsGridVisible { get; set; } = true;
-
+    public bool IsTileSelectorVisible { get; set; } = true;
+    
     public RenderLayer RenderLayer => RenderLayer.Interactables;
 
     public TileMapEditor()
     {
     }
 
+    [Button]
+    public void Deselect()
+    {
+        TileMap = null;
+    }
+
     public void Update()
     {
-        TileMap ??= Program.World.Components.OfType<TileMap>().First();
-
-        if (ImGui.Begin("Tiles"))
+        bool open = IsTileSelectorVisible;
+        if (open && ImGui.Begin("Tiles", ref open))
         {
             foreach (var tile in TileManager.Instance.Tiles)
             {
@@ -35,6 +41,10 @@ internal class TileMapEditor : IGameComponent, ISaveable
             }
         }
         ImGui.End();
+        IsTileSelectorVisible = open;
+
+        if (TileMap is null)
+            return;
 
         var mousePos = Program.Camera.ScreenToWorld(Mouse.Position);
         Vector2 localMousePos = TileMap.Transform.WorldToLocal(mousePos);
@@ -58,9 +68,7 @@ internal class TileMapEditor : IGameComponent, ISaveable
 
     public void Render(ICanvas canvas)
     {
-        TileMap ??= Program.World.Components.OfType<TileMap>().First();
-
-        if (!IsGridVisible)
+        if (!IsGridVisible || TileMap is null)
             return;
 
         var mousePos = Program.Camera.ScreenToWorld(Mouse.Position);
@@ -88,13 +96,12 @@ internal class TileMapEditor : IGameComponent, ISaveable
         }
     }
 
-    public IEnumerable<string> Save()
+    public void Initalize()
     {
-        yield break;
     }
 
-    public static IGameComponent Load(string[] args)
+    public void Select(TileMap tileMap)
     {
-        return new TileMapEditor();
+        this.TileMap = tileMap;
     }
 }

@@ -10,6 +10,8 @@ internal class FlyingCameraController : IGameComponent
     public RenderLayer RenderLayer { get; }
     float zoom;
 
+    public float Speed = 1;
+
     public void Render(ICanvas canvas)
     {
     }
@@ -23,11 +25,11 @@ internal class FlyingCameraController : IGameComponent
         if (Keyboard.IsKeyDown(Key.S))
             delta -= Program.Camera.Transform.Down;
         if (Keyboard.IsKeyDown(Key.A))
-            delta -= Program.Camera.Transform.Forward;
+            delta -= Program.Camera.Transform.Right;
         if (Keyboard.IsKeyDown(Key.D))
-            delta -= Program.Camera.Transform.Backward;
+            delta -= Program.Camera.Transform.Left;
 
-        float speed = 1;
+        float speed = Speed;
         if (Keyboard.IsKeyDown(Key.LeftShift))
             speed = 5;
 
@@ -36,5 +38,9 @@ internal class FlyingCameraController : IGameComponent
         zoom += Mouse.ScrollWheelDelta;
 
         Program.Camera.VerticalSize = MathF.Pow(1.1f, -zoom);
+    }
+
+    public void Initalize()
+    {
     }
 }

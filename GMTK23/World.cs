@@ -63,4 +63,24 @@ internal class World
             canvas.PopState();
         }
     }
+
+    public TComponent? Find<TComponent>() where TComponent : IGameComponent
+    {
+        return FindAll<TComponent>().FirstOrDefault();
+    }
+
+    public TComponent? Find<TComponent>(Predicate<TComponent> predicate) where TComponent : IGameComponent
+    {
+        return FindAll(predicate).FirstOrDefault();
+    }
+
+    public IEnumerable<TComponent> FindAll<TComponent>() where TComponent : IGameComponent
+    {
+        return components.OfType<TComponent>();
+    }
+
+    public IEnumerable<TComponent> FindAll<TComponent>(Predicate<TComponent> predicate) where TComponent : IGameComponent
+    {
+        return components.OfType<TComponent>().Where(x => predicate(x));
+    }
 }
