@@ -13,10 +13,10 @@ internal class SceneViewer
 
     public void Layout()
     {
+#if DEBUG
         if (Keyboard.IsKeyPressed(Key.F4))
-        {
             Open = !Open;
-        }
+#endif
 
         if (Open && ImGui.Begin("Scene Viewer", ref Open))
         {

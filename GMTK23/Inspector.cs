@@ -14,8 +14,10 @@ internal class Inspector
 
     public void Layout()
     {
+#if DEBUG
         if (Keyboard.IsKeyPressed(Key.F1))
             open = !open;
+#endif
 
         if (open && ImGui.Begin("Inspector", ref open))
         {

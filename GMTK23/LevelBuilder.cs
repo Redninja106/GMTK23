@@ -52,12 +52,13 @@ delete/backspace - remove objects";
 
     public void Update()
     {
+#if DEBUG
         if (Keyboard.IsKeyPressed(Key.F2))
             active = !active;
 
         if (Keyboard.IsKeyPressed(Key.F3))
             saveWindow = !saveWindow;
-
+#endif
         LayoutSaveWindow();
 
         if (!active)

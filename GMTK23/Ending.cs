@@ -11,7 +11,7 @@ class Ending
     public static Ending StickySituation { get; } = new ("Sticky Situation", "The player's stick was wet.");
     public static Ending ItsLikeBrawl { get; } = new ("It's Like Brawl!", "The player tripped and fell.");
     public static Ending CelestialKidnapping { get; } = new("Celestial Kidnapping", "The player ascended into the heavens.");
-    public static Ending QuickAndPainful { get; } = new("Quick and Painful", "The player spontaneously combusted.");
+    public static Ending QuickAndPainful { get; } = new("Quick and Painful", "The player experienced spontaneous combustion.");
     public static Ending ShouldveRespawn { get; } = new("No Way Home", "Should've set a respawn point.");
     public static Ending SoClose { get; } = new("So Close...", "You're just cruel.");
 
