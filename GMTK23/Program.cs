@@ -1,14 +1,12 @@
 ﻿using Silk.NET.Input.Glfw;
 using Silk.NET.Windowing.Glfw;
 using SimulationFramework;
-using SimulationFramework.AudioExtensions;
 using SimulationFramework.Desktop;
 using SimulationFramework.Drawing;
 using System.Diagnostics;
 using System.Numerics;
 using GMTK23;
 using GMTK23.Particles;
-using SimulationFramework.AudioExtensions.Windows;
 
 new Program().Run(new DesktopPlatform());
 
@@ -26,8 +24,6 @@ partial class Program : Simulation
 
     public override void OnInitialize()
     {
-        Application.RegisterComponent<WindowsAudioProvider>(new());
-
         Camera = new(15);
         Inspector = new();
         SceneViewer = new();
@@ -46,18 +42,6 @@ partial class Program : Simulation
         if (nextWorld is not null)
             World = nextWorld;
 
-        //if (Keyboard.IsKeyPressed(Key.F11))
-        //{
-        //    if (Window.IsFullscreen)
-        //    {
-        //        Window.ExitFullscreen();
-        //    }
-        //    else
-        //    {
-        //        Window.EnterFullscreen();
-        //    }
-        //}
-
         if (Keyboard.IsKeyPressed(Key.R))
         {
             ReloadLevel("./Levels/cave.lvl");
@@ -69,6 +53,11 @@ partial class Program : Simulation
 
         canvas.ResetState();
         canvas.Clear(Color.FromHSV(0,0,0f));
+
+        if (Window.IsMinimized)
+        {
+            return;
+        }
 
         var waypoint = World.Find<CameraWaypoint>();
         if (waypoint is not null)
@@ -92,8 +81,6 @@ partial class Program : Simulation
         Camera.ApplyTo(canvas);
         World.Render(canvas);
         canvas.PopState();
-
-        // canvas.DrawText(Performance.Framerate.ToString("f0"), new(Camera.DisplayWidth, 0), Alignment.TopRight);
     }
 
     public static void ReloadLevel(string path)
