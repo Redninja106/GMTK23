@@ -12,15 +12,16 @@ internal class TileMap : IGameComponent, ISaveable
 
     private Tile?[] tiles;
 
-    public RenderLayer RenderLayer => RenderLayer.Interactables;
+    public RenderLayer RenderLayer { get; }
 
     public Transform Transform;
 
-    public TileMap(int width, int height)
+    public TileMap(int width, int height, RenderLayer renderLayer)
     {
         this.Transform = new();
         this.Width = width;
         this.Height = height;
+        RenderLayer = renderLayer;
 
         tiles = new Tile?[width * height];
     }
@@ -66,6 +67,7 @@ internal class TileMap : IGameComponent, ISaveable
         yield return Transform.ToString()!;
         yield return Width.ToString();
         yield return Height.ToString();
+        yield return RenderLayer.ToString();
 
         foreach (var tile in tiles)
         {
@@ -79,7 +81,9 @@ internal class TileMap : IGameComponent, ISaveable
         var width = reader.NextInt();
         var height = reader.NextInt();
 
-        var result = new TileMap(width, height);
+        var layer = Enum.Parse<RenderLayer>(reader.Next(), true);
+
+        var result = new TileMap(width, height, layer);
         result.Transform = transform;
 
         if (reader.CountRemaining > 0) 
@@ -92,10 +96,6 @@ internal class TileMap : IGameComponent, ISaveable
         }
 
         return result;
-    }
-
-    public void Initalize()
-    {
     }
 
     public ref Tile? this[int x, int y]
