@@ -26,6 +26,9 @@ internal class CameraWaypoint : IGameComponent, ISaveable
 
     public void Update()
     {
+        if (!Active)
+            return;
+
         float lerpFactor = MathUtils.TimescaledLerpFactor(Smoothing, Time.DeltaTime);
         Program.Camera.Transform.LerpTowards(TargetTransform, lerpFactor);
         Program.Camera.VerticalSize = MathHelper.Lerp(Program.Camera.VerticalSize, TargetSize, lerpFactor); 

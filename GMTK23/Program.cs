@@ -21,7 +21,8 @@ partial class Program : Simulation
     public static Vector2 MousePosition { get; private set; }
     public static Inspector Inspector { get; private set; }
     public static SceneViewer SceneViewer { get; private set; }
-    
+    public static string CurrentLevelPath { get; private set; }
+
     public override void OnInitialize()
     {
         // Application.RegisterComponent<WindowsAudioProvider>(new());
@@ -76,6 +77,7 @@ partial class Program : Simulation
         {
             nextWorld.Add(component);
         }
+        CurrentLevelPath = path;
     }
 
 }

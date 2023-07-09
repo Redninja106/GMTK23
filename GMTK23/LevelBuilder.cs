@@ -178,10 +178,12 @@ delete/backspace - remove objects";
 
     private string GetBestLevelFileName()
     {
-        int levelNumber = 0;
-        while (File.Exists($"Levels/test{levelNumber}.lvl"))
-            levelNumber++;
+        return Path.GetFileName(Program.CurrentLevelPath);
 
-        return $"test{levelNumber}.lvl";
+        // int levelNumber = 0;
+        // while (File.Exists($"Levels/test{levelNumber}.lvl"))
+        //     levelNumber++;
+        // 
+        // return $"test{levelNumber}.lvl";
     }
 }
