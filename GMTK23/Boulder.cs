@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace GMTK23;
-internal class Boulder : IGameComponent, ISaveable, IInteractable
+internal class Boulder : IGameComponent, ISaveable, IInteractable, IFallable
 {
     public TileMap tileMap;
     public RenderLayer RenderLayer => tileMap.RenderLayer;
@@ -45,6 +45,12 @@ internal class Boulder : IGameComponent, ISaveable, IInteractable
     public Rectangle GetBounds()
     {
         return new Rectangle(transform.Position, new(tileMap.Width, tileMap.Height));
+    }
+
+    public void Fall()
+    {
+        this.transform.Rotation = Angle.ToRadians(90);
+        this.transform.Position = new(47, 33);
     }
 }
 

@@ -49,7 +49,7 @@ internal class Tree : IGameComponent, ISaveable, IInteractable, IFallable
     public void Fall()
     {
         this.transform.Rotation = Angle.ToRadians(-90);
-        this.transform.Position = new(92, 47);
+        this.transform.Position = new(80, 49);
 
         // do a player hit test
         // if success kill player

@@ -8,21 +8,28 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace GMTK23;
-internal class Cloud : IGameComponent, ISaveable, IInteractable
+internal class Cloud : IGameComponent, ISaveable, IInteractable, IFallable
 {
     public TileMap tileMap;
     public RenderLayer RenderLayer => tileMap.RenderLayer;
     public Transform transform;
+    public Vector2 targetPos;
 
     public Cloud(Transform transform, TileMap tileMap)
     {
         this.transform = transform;
+        this.targetPos = transform.Position;
         this.tileMap = tileMap;
     }
 
     public void Render(ICanvas canvas)
     {
         tileMap.Render(canvas);
+    }
+
+    public void setTargetPos(Vector2 targetPos)
+    {
+        this.targetPos = targetPos;
     }
 
     public void Update()
@@ -45,6 +52,12 @@ internal class Cloud : IGameComponent, ISaveable, IInteractable
     public Rectangle GetBounds()
     {
         return new Rectangle(transform.Position, new(tileMap.Width, tileMap.Height));
+    }
+
+    public void Fall()
+    {
+        Program.World.Find<Avatar>();
+        this.transform.Position = new(transform.Position.X, 36);
     }
 }
 
