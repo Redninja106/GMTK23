@@ -68,6 +68,10 @@ internal class InteractableCard : IGameComponent
         {
             var interactables = Program.World.FindAll<IInteractable>();
             interactableCollider = null;
+            if (Mouse.IsButtonReleased(MouseButton.Left))
+            {
+                isDragging = false;
+            }
 
             foreach (var interactable in interactables)
             {
@@ -79,7 +83,6 @@ internal class InteractableCard : IGameComponent
                     if (Mouse.IsButtonReleased(MouseButton.Left))
                     {
                         PlayableCard.Interact(interactable);
-                        isDragging = false;
                     }
                     else
                     {

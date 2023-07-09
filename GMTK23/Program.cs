@@ -21,6 +21,7 @@ partial class Program : Simulation
     public static Inspector Inspector { get; private set; }
     public static SceneViewer SceneViewer { get; private set; }
     public static string CurrentLevelPath { get; private set; }
+    public static bool NoIntro = false;
 
     public override void OnInitialize()
     {

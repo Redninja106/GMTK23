@@ -30,12 +30,18 @@ internal class NewGameManager : IGameComponent
             if (fadeOutTime > 1)
             {
                 Program.ReloadLevel("./Levels/cave.lvl");
+                Program.NoIntro = true;
             }
         }
     }
 
     public void Update()
     {
+        if (Program.NoIntro)
+        {
+            Program.ReloadLevel("./Levels/cave.lvl");
+        }
+
         elapsedTime += Time.DeltaTime;
 
         if (fadeOutTime != -1)
