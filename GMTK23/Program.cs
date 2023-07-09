@@ -46,17 +46,17 @@ partial class Program : Simulation
         if (nextWorld is not null)
             World = nextWorld;
 
-        if (Keyboard.IsKeyPressed(Key.F11))
-        {
-            if (Window.IsFullscreen)
-            {
-                Window.ExitFullscreen();
-            }
-            else
-            {
-                Window.EnterFullscreen();
-            }
-        }
+        //if (Keyboard.IsKeyPressed(Key.F11))
+        //{
+        //    if (Window.IsFullscreen)
+        //    {
+        //        Window.ExitFullscreen();
+        //    }
+        //    else
+        //    {
+        //        Window.EnterFullscreen();
+        //    }
+        //}
 
         if (Keyboard.IsKeyPressed(Key.R))
         {

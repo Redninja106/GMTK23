@@ -58,11 +58,6 @@ internal class GameStateManager : IGameComponent
         {
             timeSinceEnding += Time.DeltaTime;
         }
-
-        if (Keyboard.IsKeyPressed(Key.F))
-        {
-            AchieveEnding(Ending.DampenedDreams);
-        }
     }
 
     public static void AchieveEnding(Ending ending)
