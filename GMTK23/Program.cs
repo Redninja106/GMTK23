@@ -28,7 +28,7 @@ partial class Program : Simulation
         Inspector = new();
         SceneViewer = new();
 
-        ReloadLevel("./Levels/cave.lvl");
+        ReloadLevel("./Levels/mainmenu.lvl");
         
         // Window.Title = "TANKS!";
         Time.MaxDeltaTime = 1 / 30f;
@@ -42,9 +42,9 @@ partial class Program : Simulation
         if (nextWorld is not null)
             World = nextWorld;
 
-        if (Keyboard.IsKeyPressed(Key.R))
+        if (Keyboard.IsKeyPressed(Key.Esc))
         {
-            ReloadLevel("./Levels/cave.lvl");
+            ReloadLevel("./Levels/mainmenu.lvl");
         }
 
         // float vol = Audio.Volume;

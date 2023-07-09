@@ -14,6 +14,22 @@ class Ending
     public static Ending QuickAndPainful { get; } = new("Quick and Painful", "The player experienced spontaneous combustion.");
     public static Ending ShouldveRespawn { get; } = new("No Way Home", "Should've set a respawn point.");
     public static Ending SoClose { get; } = new("So Close...", "You're just cruel.");
+    
+    public static Ending[] AllEndings = new Ending[]
+    {
+        DeathFromAbove,
+        RoleRevised,
+        AvatarAsphyxiation,
+        DampenedDreams,
+        NoOneHeard,
+        ThatWasEasy,
+        StickySituation,
+        ItsLikeBrawl,
+        CelestialKidnapping,
+        QuickAndPainful,
+        ShouldveRespawn,
+        SoClose,
+    };
 
     public string Title;
     public string Description;

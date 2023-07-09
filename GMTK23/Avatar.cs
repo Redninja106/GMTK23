@@ -218,11 +218,11 @@ internal class Avatar : IGameComponent, ISaveable, IFallable, ICombustable, IWet
 class Torch : IInteractable
 {
     public ElementalState elementalState;
-    private Avatar avatar;
+    private Transform avatarTransform;
 
-    public Torch(Avatar avatar, bool startsWet, bool startsFlaming)
+    public Torch(Transform avatarTransform, bool startsWet, bool startsFlaming)
     {
-        this.avatar = avatar;
+        this.avatarTransform = avatarTransform;
         elementalState = new(this, startsFlaming, startsWet);
     }
 
@@ -230,13 +230,13 @@ class Torch : IInteractable
 
     public Rectangle GetBounds()
     {
-        return new(avatar.Transform.Position + new Vector2(3, .5f), new(.1f, .1f), Alignment.Center);
+        return new(avatarTransform.Position + new Vector2(3, .5f), new(.1f, .1f), Alignment.Center);
     }
 
     public void Render(ICanvas canvas)
     {
         canvas.PushState();
-        canvas.ApplyTransform(avatar.Transform);
+        canvas.ApplyTransform(avatarTransform);
         canvas.Fill(new Color(92, 78, 46));
         canvas.StrokeWidth(.25f);
         canvas.DrawLine(2, 2, 3, .5f);

@@ -45,13 +45,18 @@ internal class GameStateManager : IGameComponent
             canvas.DrawRect(Program.Camera.Transform.Position, new(Program.Camera.HorizontalSize, Program.Camera.VerticalSize), Alignment.Center);
             if (timeSinceEnding > fadeoutTime + 5)
             {
-                Program.ReloadLevel("./Levels/cave.lvl");
+                Program.ReloadLevel("./Levels/mainmenu.lvl");
             }
         }
     }
 
     public void Update()
     {
+        if (Keyboard.IsKeyPressed(Key.R))
+        {
+            Program.ReloadLevel(Program.CurrentLevelPath);
+        }
+
         elapsedTime += Time.DeltaTime;
 
         if (achievedEnding is not null)
@@ -63,6 +68,13 @@ internal class GameStateManager : IGameComponent
     public static void AchieveEnding(Ending ending)
     {
         var manager = Program.World.Find<GameStateManager>();
+
+        if (manager.achievedEnding is not null)
+            return;
+        
         manager!.achievedEnding = ending;
+        
+        var visManager = Program.World.Find<EndingVisibilityManager>();
+        visManager?.OnEndingAchieved(ending, "abcdef");
     }
 }

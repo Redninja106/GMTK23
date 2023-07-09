@@ -19,9 +19,10 @@ internal class InteractableCard : IGameComponent
     public float Smoothing { get; set; } = 15;
     public RenderLayer RenderLayer => RenderLayer.Cards;
 
-    public InteractableCard(PlayableCard playableCard)
+    public InteractableCard(PlayableCard playableCard, Vector2 initialPosition)
     {
         this.PlayableCard = playableCard;
+        Transform.Position = TargetTransform.Position = initialPosition;
     }
 
     public void Render(ICanvas canvas)

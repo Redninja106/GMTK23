@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <None Remove="Levels\mainmenu.lvl" />
+    <None Remove="Levels\newgame.lvl" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,10 +36,6 @@
     <None Update="Assets\dude.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="MainMenu\" />
   </ItemGroup>
 	
 </Project>

@@ -19,9 +19,9 @@ internal class PlayerHand : IGameComponent, ISaveable
 
         Cards = new()
         {
-            new InteractableCard(new CombustCard()),
-            new InteractableCard(new DrenchCard()),
-            new InteractableCard(new FallCard()),
+            new InteractableCard(new CombustCard(), transform.Position),
+            new InteractableCard(new DrenchCard(), transform.Position),
+            new InteractableCard(new FallCard(), transform.Position),
         };
     }
 

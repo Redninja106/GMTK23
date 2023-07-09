@@ -55,7 +55,7 @@ class MineTreeState : AvatarState
         {
 
             tree!.EndBreaking();
-            Avatar.torch = new(Avatar, tree!.elementalState.IsWet, tree!.elementalState.IsBurning); 
+            Avatar.torch = new(Avatar.Transform, tree!.elementalState.IsWet, tree!.elementalState.IsBurning); 
 
             if (!Avatar.torch.elementalState.IsBurning)
             {
