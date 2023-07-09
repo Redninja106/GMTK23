@@ -55,6 +55,11 @@ partial class Program : Simulation
             }
         }
 
+        if (Keyboard.IsKeyPressed(Key.R))
+        {
+            ReloadLevel("./Levels/cave.lvl");
+        }
+
         // float vol = Audio.Volume;
         // ImGui.DragFloat("volume", ref vol, 0.01f, 0, 1);
         // Audio.Volume = vol;
