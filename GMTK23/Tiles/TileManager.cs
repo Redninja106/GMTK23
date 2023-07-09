@@ -22,6 +22,7 @@ internal class TileManager
         Add(new SolidTile(3, Color.Blue));
         Add(new SolidTile(4, Color.Black));
         Add(new SolidTile(5, new Color(92, 78, 46)));
+        Add(new SolidTile(6, new Color(61, 61, 61)));
     }
 
     public void Add(Tile tile)

@@ -22,6 +22,6 @@ internal static class VectorExtensions
         if (distance < amount)
             return target;
 
-        return (target - vector).Normalized() * amount;
+        return vector + (target - vector).Normalized() * amount;
     }
 }
