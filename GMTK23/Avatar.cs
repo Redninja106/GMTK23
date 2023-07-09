@@ -1,5 +1,6 @@
 ﻿using GMTK23.Extensions;
 using GMTK23.Interactions;
+using GMTK23.Particles;
 using GMTK23.Tiles;
 using System;
 using System.Collections.Generic;
@@ -16,22 +17,25 @@ internal class Avatar : IGameComponent, ISaveable, IFallable
     public float WalkSpeed { get; set; } = 5;
     public ITexture sprite;
     public bool hasTorch = false;
-    public AvatarState AvatarState { get; private set; }
+    public AvatarState? AvatarState { get; private set; }
     public bool IsAtTarget => this.Transform.Position == TargetPos;
     private int currentStateIndex = -1;
-    private AvatarState[] states;
+    private AvatarState?[] states;
+    private ParticleSystem? bloodParticleSystem = null;
+    private float timeSinceDeath = 0;
 
     public void NextState()
     {
         currentStateIndex++;
         AvatarState = states[currentStateIndex];
     }
+
     public Avatar(Transform transform)
     {
         Transform = transform;
         TargetPos = transform.Position;
         sprite = Graphics.LoadTexture("./Assets/dude.png");
-        states = new AvatarState[]
+        states = new AvatarState?[]
         {
             new MoveToTreeState(this),
             new MineTreeState(this),
@@ -45,6 +49,7 @@ internal class Avatar : IGameComponent, ISaveable, IFallable
 
     public void Render(ICanvas canvas)
     {
+        canvas.PushState();
         canvas.ApplyTransform(Transform);
         canvas.DrawTexture(sprite, 0, 0, 2, 3);
         if (hasTorch)
@@ -53,6 +58,8 @@ internal class Avatar : IGameComponent, ISaveable, IFallable
             canvas.StrokeWidth(.25f);
             canvas.DrawLine(2,2,3,.5f);
         }
+        canvas.PopState();
+        bloodParticleSystem?.Render(canvas);
     }
 
     public void Update()
@@ -63,6 +70,17 @@ internal class Avatar : IGameComponent, ISaveable, IFallable
         {
             AvatarState.Update();
         }
+        else
+        {
+            timeSinceDeath += Time.DeltaTime;
+
+            if (timeSinceDeath > 1 && bloodParticleSystem is null)
+            {
+                bloodParticleSystem = new(new BloodParticleProvider(this));
+                bloodParticleSystem.Emitter.Burst(100);
+            }
+        }
+        bloodParticleSystem?.Update();
     }
 
     public void setTargetPos(Vector2 targetPos)
@@ -93,6 +111,42 @@ internal class Avatar : IGameComponent, ISaveable, IFallable
 
     public Rectangle GetBounds()
     {
+        if (AvatarState is null)
+        {
+            return new Rectangle(Transform.Position, new(3, 2), Alignment.TopRight);
+        }
+
         return new Rectangle(Transform.Position, new(2, 3));
     }
+
+    class BloodParticleProvider : IParticleProvider
+    {
+        public IInteractable interactable;
+        private Random rng = new();
+
+        public BloodParticleProvider(IInteractable interactable)
+        {
+            this.interactable = interactable;
+        }
+
+        public Particle CreateParticle(ParticleEmitter emitter)
+        {
+            var bounds = interactable.GetBounds();
+            return new()
+            {
+                transform = new(
+                    bounds.X + rng.NextSingle() * bounds.Width,
+                    bounds.Y + rng.NextSingle() * bounds.Height,
+                    rng.NextSingle() * MathF.Tau
+                    ),
+                acceleration = Vector2.UnitY * 14,
+                angularVelocity = rng.NextSingle() * MathF.Tau,
+                color = Color.Red,
+                lifetime = 1f + rng.NextSingle(),
+                size = .1f + rng.NextSingle() * .1f,
+                velocity = new(rng.NextSingle() * 2 - 1, -8)
+            };
+        }
+    }
+
 }
