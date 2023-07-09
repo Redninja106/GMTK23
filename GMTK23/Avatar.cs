@@ -22,7 +22,7 @@ internal class Avatar : IGameComponent, ISaveable, IFallable, ICombustable, IWet
     private float timeSinceDeath = 0;
     private ElementalState elementalState;
     private float timeOnFire;
-    private bool hasFallen;
+    public bool HasFallen { get; private set; }
     public Torch? torch;
 
     public void SetState(AvatarState state)
@@ -130,13 +130,13 @@ internal class Avatar : IGameComponent, ISaveable, IFallable, ICombustable, IWet
         this.TargetPos = new(Transform.Position.X + 3, Transform.Position.Y + 1);
         this.Transform.Position = new(Transform.Position.X + 3, Transform.Position.Y + 1);
         this.TargetPos = this.Transform.Position;
-        hasFallen = true;
+        HasFallen = true;
         AvatarState = null;
     }
 
     public Rectangle GetBounds()
     {
-        if (hasFallen)
+        if (HasFallen)
         {
             return new Rectangle(Transform.Position, new(3, 2), Alignment.TopRight);
         }

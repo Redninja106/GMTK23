@@ -9,7 +9,7 @@ internal class GameStateManager : IGameComponent
 {
     public RenderLayer RenderLayer { get; }
 
-    private Ending? AchievedEnding = null;
+    private Ending? achievedEnding = null;
 
     public void Render(ICanvas canvas)
     {
@@ -21,6 +21,6 @@ internal class GameStateManager : IGameComponent
 
     public void AchieveEnding(Ending ending)
     {
-        AchievedEnding = ending;
+        achievedEnding = ending;
     }
 }
