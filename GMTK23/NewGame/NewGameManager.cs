@@ -16,9 +16,9 @@ internal class NewGameManager : IGameComponent
         canvas.Clear(Color.Black);
         canvas.Translate(Program.Camera.Transform.Position);
 
-        canvas.FontStyle(.75f, FontStyle.Normal);
-        canvas.DrawText("abcdef is trying to make a torch", 0, 0, Alignment.BottomCenter);
-        canvas.DrawText("what happens next is up to you", 0, 0, Alignment.TopCenter);
+        canvas.FontStyle(.5f, FontStyle.Normal);
+        canvas.DrawText("The player is trying to make a torch", 0, -.1f, Alignment.BottomCenter);
+        canvas.DrawText("what happens next is up to you", 0, .1f, Alignment.TopCenter);
 
         canvas.Fill(new Color(0, 0, 0, 1f - MathF.Min(1, elapsedTime)));
         canvas.DrawRect(Vector2.Zero, new(Program.Camera.HorizontalSize, Program.Camera.VerticalSize), Alignment.Center);
@@ -38,14 +38,22 @@ internal class NewGameManager : IGameComponent
     {
         elapsedTime += Time.DeltaTime;
 
-        if (elapsedTime > 4 && fadeOutTime == -1)
-        {
-            fadeOutTime = 0;
-        }
-
         if (fadeOutTime != -1)
         {
             fadeOutTime += Time.DeltaTime;
         }
+        else 
+        {
+            if (elapsedTime > 4 )
+            {
+                fadeOutTime = 0;
+            }
+
+            if (Mouse.IsButtonPressed(MouseButton.Left))
+            {
+                fadeOutTime = 0;
+            }
+        }
+
     }
 }

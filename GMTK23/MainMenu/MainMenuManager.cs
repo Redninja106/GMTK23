@@ -158,13 +158,13 @@ class EndingsMenu
         canvas.DrawText(visible ? ending.Description : "???", bounds.Position + Vector2.One * .25f);
         canvas.PopState();
 
-        if (visible)
-        {
-            canvas.Fill(new Color(.75f, .75f, .75f));
-            canvas.FontStyle(.15f, FontStyle.Italic);
-
-            canvas.DrawText($"First achieved with {visibiltyManager.GetAchievedUsername(ending)}", bounds.GetAlignedPoint(Alignment.BottomLeft) + new Vector2(.25f, -.25f), Alignment.BottomLeft);
-        }
+        // if (visible)
+        // {
+        //     canvas.Fill(new Color(.75f, .75f, .75f));
+        //     canvas.FontStyle(.15f, FontStyle.Italic);
+        // 
+        //     canvas.DrawText($"First achieved with {visibiltyManager.GetAchievedUsername(ending)}", bounds.GetAlignedPoint(Alignment.BottomLeft) + new Vector2(.25f, -.25f), Alignment.BottomLeft);
+        // }
 
         canvas.PopState();
     }
