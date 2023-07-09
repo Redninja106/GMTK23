@@ -18,7 +18,7 @@ internal class Avatar : IGameComponent, ISaveable, IFallable
     public Avatar(Transform transform)
     {
         Transform = transform;
-        TargetPos = transform.Position;
+        TargetPos = new Vector2(97, Transform.Position.Y);
     }
 
     public RenderLayer RenderLayer => RenderLayer.Avatar;
@@ -57,6 +57,7 @@ internal class Avatar : IGameComponent, ISaveable, IFallable
         this.Transform.Rotation = Angle.ToRadians(90);
         this.TargetPos = new(Transform.Position.X + 3, Transform.Position.Y + 1);
         this.Transform.Position = new(Transform.Position.X + 3, Transform.Position.Y + 1);
+        this.TargetPos = this.Transform.Position;
     }
 
     public Rectangle GetBounds()

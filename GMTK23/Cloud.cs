@@ -13,7 +13,9 @@ internal class Cloud : IGameComponent, ISaveable, IInteractable, IFallable
     public TileMap tileMap;
     public RenderLayer RenderLayer => tileMap.RenderLayer;
     public Transform transform;
+    public Vector2 returnPos;
     public Vector2 targetPos;
+    public float fallSpeed = 8;
 
     public Cloud(Transform transform, TileMap tileMap)
     {
@@ -36,6 +38,17 @@ internal class Cloud : IGameComponent, ISaveable, IInteractable, IFallable
     {
         tileMap.Transform.Match(this.transform);
         tileMap.Update();
+        Vector2 v = GMTK23.Extensions.VectorExtensions.StepTowards(transform.Position, targetPos, fallSpeed * Time.DeltaTime);
+        transform.Position = v;
+
+        if (this.GetBounds().Intersects(Program.World.Find<Avatar>().GetBounds()))
+        {
+            Avatar av = Program.World.Find<Avatar>();
+            av.Transform = new Transform(transform.Position.X+6,transform.Position.Y,0);
+            av.setTargetPos(new Vector2(returnPos.X + 6, returnPos.Y));
+            av.WalkSpeed = fallSpeed;
+            this.setTargetPos(returnPos);
+        }
     }
 
     public IEnumerable<string> Save()
@@ -56,8 +69,8 @@ internal class Cloud : IGameComponent, ISaveable, IInteractable, IFallable
 
     public void Fall()
     {
-        Program.World.Find<Avatar>();
-        this.transform.Position = new(transform.Position.X, 36);
+        returnPos = transform.Position;
+        this.targetPos = new(transform.Position.X, 36);
     }
 }
 

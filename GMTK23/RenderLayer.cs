@@ -11,6 +11,7 @@ internal enum RenderLayer
     World,
     Interactables,
     Avatar,
+    Foreground,
     Particles,
     Cards,
     UI,
