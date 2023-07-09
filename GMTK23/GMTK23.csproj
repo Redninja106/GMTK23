@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Levels\cards.lvl" />
+    <None Remove="Levels\mainmenu.lvl" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,6 +36,10 @@
     <None Update="Assets\Sounds\fire_burst.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="MainMenu\" />
   </ItemGroup>
 	
 </Project>

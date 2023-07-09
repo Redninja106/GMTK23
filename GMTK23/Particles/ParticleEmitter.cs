@@ -29,7 +29,7 @@ internal class ParticleEmitter : IPositionable
 
     public void Update()
     {
-        if (ParticleProvider is null)
+        if (ParticleProvider is null || Rate is 0)
         {
             lastParticle = Time.TotalTime;
             return;

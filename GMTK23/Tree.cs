@@ -7,6 +7,7 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace GMTK23;
 internal class Tree : IGameComponent, ISaveable, IFallable, IWettable, ICombustable
@@ -16,12 +17,24 @@ internal class Tree : IGameComponent, ISaveable, IFallable, IWettable, ICombusta
     public Transform transform;
     public ElementalState elementalState;
     bool isFallen;
+    private ParticleSystem woodChipSystem;
 
     public Tree(Transform transform, TileMap tileMap)
     {
         this.transform = transform;
         this.tileMap = tileMap;
         elementalState = new(this);
+        woodChipSystem = new(new WoodChipParticleProvider(this.transform.Position + new Vector2(4, 16)));
+    }
+
+    public void BeginBreaking()
+    {
+        woodChipSystem.Emitter.Rate = 10;
+    }
+
+    public void EndBreaking()
+    {
+        woodChipSystem.Emitter.Rate = 0;
     }
 
     public void Render(ICanvas canvas)
@@ -30,6 +43,7 @@ internal class Tree : IGameComponent, ISaveable, IFallable, IWettable, ICombusta
         tileMap.Render(canvas);
         canvas.PopState();
         elementalState.Render(canvas);
+        woodChipSystem.Render(canvas);
     }
 
     public void Update()
@@ -37,6 +51,7 @@ internal class Tree : IGameComponent, ISaveable, IFallable, IWettable, ICombusta
         tileMap.Transform.Match(this.transform);
         tileMap.Update();
         elementalState.Update();
+        woodChipSystem.Update();
     }
 
     public IEnumerable<string> Save()
@@ -82,5 +97,32 @@ internal class Tree : IGameComponent, ISaveable, IFallable, IWettable, ICombusta
     public void Drench()
     {
         elementalState.Drench();
+    }
+
+    class WoodChipParticleProvider : IParticleProvider
+    {
+        public Vector2 point;
+        Random rng = new();
+
+        public WoodChipParticleProvider(Vector2 point)
+        {
+            this.point = point;
+        }
+
+        public Particle CreateParticle(ParticleEmitter emitter)
+        {
+            return new()
+            {
+                transform = new(
+                    point.X, point.Y, rng.NextSingle() * MathF.Tau
+                    ),
+                lifetime = 1f,
+                angularVelocity = 5 * (rng.NextSingle() * MathF.Tau - MathF.PI),
+                velocity = 5 * Angle.ToVector(Angle.ToRadians(180 + rng.NextSingle() * 90)),
+                acceleration = Vector2.UnitY * 8,
+                color = new Color(92, 78, 46),
+                size = .1f + rng.NextSingle() * .2f,
+            };
+        }
     }
 }

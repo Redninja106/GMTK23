@@ -14,7 +14,7 @@ internal class Avatar : IGameComponent, ISaveable, IFallable, ICombustable, IWet
 {
     public Transform Transform { get; set; }
     public Vector2 TargetPos { get; set; }
-    public float WalkSpeed { get; set; } = 5;
+    public float WalkSpeed { get; set; } = 7.5f;
     public ITexture sprite;
     public AvatarState? AvatarState { get; private set; }
     public bool IsAtTarget => this.Transform.Position == TargetPos;
@@ -80,11 +80,15 @@ internal class Avatar : IGameComponent, ISaveable, IFallable, ICombustable, IWet
 
         Boulder b = Program.World.Find<Boulder>();
         if (b.GetBounds().Intersects(this.GetBounds())
-            && AvatarState != null)
+            && AvatarState is not (null or Idle))
         {
             if (b.transform.Position.X < this.Transform.Position.X)
             {
-                GameStateManager.AchieveEnding(Ending.ShouldveRespawn);
+                SetState(new Idle(this, Ending.ShouldveRespawn));
+            }
+            else
+            {
+                SetState(new Idle(this, null));
             }
 
             TargetPos = Transform.Position;
@@ -178,13 +182,6 @@ internal class Avatar : IGameComponent, ISaveable, IFallable, ICombustable, IWet
     public void Combust()
     {
         this.elementalState.Combust();
-
-        if (this.torch is not null)
-        {
-            this.torch.elementalState.Combust();
-
-            GameStateManager.AchieveEnding(Ending.ThatWasEasy);
-        }
     }
 
     class BloodParticleProvider : IParticleProvider
@@ -216,7 +213,6 @@ internal class Avatar : IGameComponent, ISaveable, IFallable, ICombustable, IWet
             };
         }
     }
-
 }
 
 class Torch : IInteractable

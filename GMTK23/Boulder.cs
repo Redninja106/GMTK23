@@ -54,7 +54,14 @@ internal class Boulder : IGameComponent, ISaveable, IInteractable, IFallable
         Avatar av = Program.World.Find<Avatar>();
         if (av.Transform.Position.X < this.transform.Position.X && timeSinceFall > 3f)
         {
-            av.Fall(Ending.AvatarAsphyxiation);
+            if (av.torch is not null)
+            {
+                av.Fall(Ending.SoClose);
+            }
+            else
+            {
+                av.Fall(Ending.AvatarAsphyxiation);
+            }
         }
     }
 
@@ -90,7 +97,6 @@ internal class Boulder : IGameComponent, ISaveable, IInteractable, IFallable
         {
             av.Kill(Ending.DeathFromAbove);
         }
-
     }
 
     class SmokeParticleProvider : IParticleProvider

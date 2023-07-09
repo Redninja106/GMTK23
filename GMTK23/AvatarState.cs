@@ -41,22 +41,29 @@ class MineTreeState : AvatarState
 
     public override void Update()
     {
+        var tree = Program.World.Find<Tree>();
+        
         if (startTime == 0)
         {
             startTime = Time.TotalTime;
             endTime = startTime + 5;
+            tree!.BeginBreaking();
         }
-
-        var tree = Program.World.Find<Tree>();
 
         if (endTime != 0
             && Time.TotalTime > endTime)
         {
+
+            tree!.EndBreaking();
             Avatar.torch = new(Avatar, tree!.elementalState.IsWet, tree!.elementalState.IsBurning); 
 
             if (!Avatar.torch.elementalState.IsBurning)
             {
                 Avatar.SetState(new MoveToFire(this.Avatar));
+            }
+            else
+            {
+                Avatar.SetState(new Idle(Avatar, Ending.ThatWasEasy));
             }
         }
     }
@@ -117,15 +124,24 @@ class LightTorch : AvatarState
 
 class Idle : AvatarState
 {
-    private Ending ending;
+    private Ending? ending;
+    private float time;
 
-    public Idle(Avatar avatar, Ending ending) : base(avatar) 
+    public Idle(Avatar avatar, Ending? ending) : base(avatar) 
     {
         this.ending = ending;
     } 
     
     public override void Update() 
     {
-        GameStateManager.AchieveEnding(ending);
+        if (ending is not null)
+        {
+            time += Time.DeltaTime;
+
+            if (time > 2)
+            {
+                GameStateManager.AchieveEnding(ending);
+            }
+        }
     }
 }
