@@ -63,7 +63,7 @@ internal class Tree : IGameComponent, ISaveable, IFallable, IWettable, ICombusta
     public void Fall()
     {
         this.transform.Rotation = Angle.ToRadians(-90);
-        this.transform.Position = new(80, 49);
+        this.transform.Position = new(81, 49);
         isFallen = true;
 
         var avatar = Program.World.Find<Avatar>();
