@@ -10,7 +10,7 @@ namespace GMTK23;
 internal class Tree : IGameComponent, ISaveable, IInteractable
 {
     public TileMap tileMap;
-    public RenderLayer RenderLayer => RenderLayer.World;
+    public RenderLayer RenderLayer => tileMap.RenderLayer;
     public Transform transform;
 
     public Tree(Transform transform, TileMap tileMap)

@@ -37,6 +37,8 @@ internal class CameraWaypoint : IGameComponent, ISaveable
     public IEnumerable<string> Save()
     {
         yield return TargetTransform.ToString();
+        yield return TargetSize.ToString();
+        yield return Smoothing.ToString();
     }
 
     public static IGameComponent Load(ArgReader reader)
