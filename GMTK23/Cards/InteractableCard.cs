@@ -42,32 +42,40 @@ internal class InteractableCard : IGameComponent
         {
             if (Mouse.IsButtonReleased(MouseButton.Left))
             {
+                var interactables = Program.World.FindAll<IInteractable>();
+
+                foreach (var interactable in interactables)
+                {
+                    var bounds = interactable.GetBounds();
+
+                    if (bounds.ContainsPoint(Transform.LocalToWorld(Vector2.Zero)))
+                    {
+                        
+                    }
+                }
+
                 isDragging = false;
             }
 
-            TargetTransform.Position = mousePos - dragOffset;
+            TargetTransform.Position = mousePos;
             TargetTransform.Rotation = 0;
         }
         else
         {
-            if (Mouse.IsButtonPressed(MouseButton.Left) && this == hand.GetCard(mousePos))
+            if (Mouse.IsButtonPressed(MouseButton.Left) && this == hand!.GetCard(mousePos))
             {
                 isDragging = true;
-                dragOffset = Transform.WorldToLocal(mousePos);
+                dragOffset = this.Transform.Position - mousePos;
             }
         }
     }
 
     public bool ContainsPoint(Vector2 point, Vector2 localOffset = default)
     {
-        var localBounds = new Rectangle(Vector2.Zero, new(.7f, 1), Alignment.BottomCenter);
+        var localBounds = new Rectangle(Vector2.Zero, new(.7f, 1f), Alignment.BottomCenter);
 
         Vector2 pointLocalSpace = Transform.WorldToLocal(point);
 
         return localBounds.ContainsPoint(pointLocalSpace + localOffset);
-    }
-
-    public void Initalize()
-    {
     }
 }

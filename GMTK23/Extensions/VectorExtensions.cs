@@ -14,7 +14,6 @@ internal static class VectorExtensions
         return new(vector.X * c - vector.Y * s, vector.X * s + vector.Y * c);
     }
 
-
     public static Vector2 StepTowards(this Vector2 vector, Vector2 target, float amount)
     {
         float distance = Vector2.Distance(vector, target);

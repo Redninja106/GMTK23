@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace GMTK23;
 internal class CameraWaypoint : IGameComponent, ISaveable
 {
-    public bool Active { get; set; }
+    public bool Active { get; set; } = true;
     public RenderLayer RenderLayer { get; }
     public Transform TargetTransform { get; set; }
     public float TargetSize { get; set; }

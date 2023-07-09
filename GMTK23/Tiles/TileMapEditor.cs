@@ -30,7 +30,7 @@ internal class TileMapEditor : IGameComponent
     public void Update()
     {
         bool open = IsTileSelectorVisible;
-        if (open && ImGui.Begin("Tiles", ref open))
+        if (TileMap is not null && open && ImGui.Begin("Tiles", ref open))
         {
             foreach (var tile in TileManager.Instance.Tiles)
             {

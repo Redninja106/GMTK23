@@ -1,4 +1,5 @@
-﻿using GMTK23.Tiles;
+﻿using GMTK23.Cards;
+using GMTK23.Tiles;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace GMTK23;
-internal class Tree : IGameComponent, ISaveable
+internal class Tree : IGameComponent, ISaveable, IInteractable
 {
     public TileMap tileMap;
     public RenderLayer RenderLayer => RenderLayer.World;
@@ -38,5 +39,10 @@ internal class Tree : IGameComponent, ISaveable
     {
         var tileMap = (TileMap)TileMap.Load(reader);
         return new Tree(tileMap.Transform, tileMap);
+    }
+
+    public Rectangle GetBounds()
+    {
+        return new Rectangle(transform.Position, new(tileMap.Width, tileMap.Height));
     }
 }
