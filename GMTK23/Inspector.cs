@@ -48,7 +48,7 @@ internal class Inspector
 
         Type type = obj.GetType();
 
-        if (ImGui.TreeNode(name is null ? obj.ToString() : $"{name}: {obj}###{name}{obj.GetHashCode()}"))
+        if (ImGui.TreeNode(name is null ? $"{obj}" : $"{name}: {obj}###{name}"))
         {
             if (obj is IGameComponent)
             {

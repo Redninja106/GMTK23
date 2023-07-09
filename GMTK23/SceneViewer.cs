@@ -22,7 +22,7 @@ internal class SceneViewer
         {
             foreach (var component in Program.World.Components)
             {
-                ImGui.PushID(component.ToString());
+                ImGui.PushID($"{component}{component.GetHashCode()}");
                 ImGui.Text(component.ToString());
                 ImGui.SameLine();
                 if (ImGui.SmallButton("select"))
