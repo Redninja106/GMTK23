@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace GMTK23.Interactions;
-internal interface ICombustable
+internal interface ICombustable : IInteractable
 {
     void Combust();
 }

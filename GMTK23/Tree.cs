@@ -14,22 +14,28 @@ internal class Tree : IGameComponent, ISaveable, IFallable, IWettable, ICombusta
     public RenderLayer RenderLayer => tileMap.RenderLayer;
     public Transform transform;
     public ElementalState elementalState;
+    bool isFallen;
 
     public Tree(Transform transform, TileMap tileMap)
     {
         this.transform = transform;
         this.tileMap = tileMap;
+        elementalState = new(this);
     }
 
     public void Render(ICanvas canvas)
     {
+        canvas.PushState();
         tileMap.Render(canvas);
+        canvas.PopState();
+        elementalState.Render(canvas);
     }
 
     public void Update()
     {
         tileMap.Transform.Match(this.transform);
         tileMap.Update();
+        elementalState.Update();
     }
 
     public IEnumerable<string> Save()
@@ -45,6 +51,11 @@ internal class Tree : IGameComponent, ISaveable, IFallable, IWettable, ICombusta
 
     public Rectangle GetBounds()
     {
+        if (isFallen)
+        {
+            return new Rectangle(transform.Position, new(tileMap.Height, tileMap.Width), Alignment.BottomLeft);
+        }
+
         return new Rectangle(transform.Position, new(tileMap.Width, tileMap.Height));
     }
 
@@ -52,7 +63,7 @@ internal class Tree : IGameComponent, ISaveable, IFallable, IWettable, ICombusta
     {
         this.transform.Rotation = Angle.ToRadians(-90);
         this.transform.Position = new(80, 49);
-
+        isFallen = true;
         // do a player hit test
         // if success kill player
         //      avatar.kill("tree")

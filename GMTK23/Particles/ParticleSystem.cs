@@ -56,8 +56,4 @@ internal class ParticleSystem : IGameComponent
     {
         this.particles.Add(particle);
     }
-
-    public void Initalize()
-    {
-    }
 }

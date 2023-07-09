@@ -13,6 +13,7 @@ struct Particle
     public float age;
     public float lifetime;
     public float drag;
+    public Vector2 acceleration;
 
     internal void Render(ICanvas canvas)
     {
@@ -30,8 +31,9 @@ struct Particle
     {
         if (!Program.World.Collision.TestPoint(transform.Position))
         {
+            velocity += acceleration * Time.DeltaTime;
             transform.Position += velocity * Time.DeltaTime;
-            velocity *= MathF.Pow(drag, Time.DeltaTime);
+            // velocity *= MathF.Pow(drag, Time.DeltaTime);
         }
 
         transform.Rotation += angularVelocity * Time.DeltaTime;

@@ -16,6 +16,13 @@ internal class PlayerHand : IGameComponent, ISaveable
     {
         this.Transform = transform;
         this.scale = scale;
+
+        Cards = new()
+        {
+            new InteractableCard(new CombustCard()),
+            new InteractableCard(new DrenchCard()),
+            new InteractableCard(new FallCard()),
+        };
     }
 
     public float offset = .4f;
@@ -33,26 +40,14 @@ internal class PlayerHand : IGameComponent, ISaveable
 
     public void Render(ICanvas canvas)
     {
+        foreach (var card in Cards)
+        {
+            card.Render(canvas);
+        }
     }
 
     public void Update()
     {
-        if (Cards is null)
-        {
-
-            Cards = new()
-            {
-                new InteractableCard(new CombustCard()),
-                new InteractableCard(new DrenchCard()),
-                new InteractableCard(new FallCard()),
-            };
-
-            foreach (var card in Cards)
-            {
-                Program.World.Add(card);
-            }
-        }
-
         float breadth = breadthUpper - (breadthUpper - breadthLower) / MathF.Pow(breadthStrength, (Cards.Count - 2));
         float increment = (breadth / Cards.Count);
         float baseAngle = (increment - breadth) / 2f - (MathF.PI / 2f);
@@ -68,34 +63,35 @@ internal class PlayerHand : IGameComponent, ISaveable
         {
             var card = Cards[i];
 
-            if (card.isDragging)
-                continue;
-
-            float angle = this.Transform.Rotation + baseAngle + i * increment;
-
-            if (selectedCardIndex is not -1 && selectedCardIndex != (Cards.Count - 1))
+            if (!card.isDragging)
             {
-                float diff = (increment / -2f) + Angle.ToRadians(12.5f / radius);
 
-                if (i <= selectedCardIndex)
+                float angle = this.Transform.Rotation + baseAngle + i * increment;
+
+                if (selectedCardIndex is not -1 && selectedCardIndex != (Cards.Count - 1))
                 {
-                    angle -= diff;
+                    float diff = (increment / -2f) + Angle.ToRadians(12.5f / radius);
+
+                    if (i <= selectedCardIndex)
+                    {
+                        angle -= diff;
+                    }
+                    else
+                    {
+                        angle += diff;
+                    }
                 }
-                else
+
+                this.Transform.Scale = new(scale, scale);
+                card.TargetTransform.Position = this.Transform.Position + scale * (Vector2.UnitY * (radius - offset) + Angle.ToVector(angle) * radius);
+                card.TargetTransform.Rotation = angle + (MathF.PI / 2f);
+                card.TargetTransform.Scale = this.Transform.Scale;
+
+                if (SelectionEnabled && card == SelectedCard)
                 {
-                    angle += diff;
+                    card.TargetTransform.Scale *= 1.20f;
+                    card.TargetTransform.Position += Angle.ToVector(angle) * .15f * scale;
                 }
-            }
-
-            this.Transform.Scale = new(scale, scale);
-            card.TargetTransform.Position = this.Transform.Position + scale * (Vector2.UnitY * (radius - offset) + Angle.ToVector(angle) * radius);
-            card.TargetTransform.Rotation = angle + (MathF.PI / 2f);
-            card.TargetTransform.Scale = this.Transform.Scale;
-
-            if (SelectionEnabled && card == SelectedCard)
-            {
-                card.TargetTransform.Scale *= 1.20f;
-                card.TargetTransform.Position += Angle.ToVector(angle) * .15f * scale;
             }
 
             card.Update();

@@ -8,27 +8,33 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace GMTK23;
-internal class LogFire : IGameComponent, ISaveable, IInteractable
+internal class LogFire : IGameComponent, ISaveable, IWettable
 {
     public TileMap tileMap;
     public RenderLayer RenderLayer => tileMap.RenderLayer;
     public Transform transform;
+    private ElementalState elementalState;
 
     public LogFire(Transform transform, TileMap tileMap)
     {
         this.transform = transform;
         this.tileMap = tileMap;
+        elementalState = new(this, initiallyBurning: true);
     }
 
     public void Render(ICanvas canvas)
     {
+        canvas.PushState();
         tileMap.Render(canvas);
+        canvas.PopState();
+        elementalState.Render(canvas);
     }
 
     public void Update()
     {
         tileMap.Transform.Match(this.transform);
         tileMap.Update();
+        elementalState.Update();
     }
 
     public IEnumerable<string> Save()
@@ -45,6 +51,11 @@ internal class LogFire : IGameComponent, ISaveable, IInteractable
     public Rectangle GetBounds()
     {
         return new Rectangle(transform.Position, new(tileMap.Width, tileMap.Height));
+    }
+
+    public void Drench()
+    {
+        this.elementalState.Drench();
     }
 }
 

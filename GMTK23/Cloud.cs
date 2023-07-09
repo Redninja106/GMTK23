@@ -17,17 +17,20 @@ internal class Cloud : IGameComponent, ISaveable, IInteractable, IFallable
     public Vector2 targetPos;
     public float fallSpeed = 8;
     public Boolean fallen = false;
+    private ElementalState elementalState;
 
     public Cloud(Transform transform, TileMap tileMap)
     {
         this.transform = transform;
         this.targetPos = transform.Position;
         this.tileMap = tileMap;
+        this.elementalState = new(this);
     }
 
     public void Render(ICanvas canvas)
     {
         tileMap.Render(canvas);
+        elementalState.Render(canvas);
     }
 
     public void setTargetPos(Vector2 targetPos)
@@ -56,6 +59,7 @@ internal class Cloud : IGameComponent, ISaveable, IInteractable, IFallable
             av.WalkSpeed = fallSpeed;
             this.setTargetPos(returnPos);
         }
+        elementalState.Update();
     }
 
     public IEnumerable<string> Save()
