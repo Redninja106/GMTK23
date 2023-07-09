@@ -148,7 +148,7 @@ class EndingsMenu
 
         canvas.Fill(new Color(.75f, .75f, .75f));
         canvas.FontStyle(.5f, FontStyle.Bold);
-        canvas.DrawText(visible ? ending.Title : "???", bounds.Position + Vector2.One * .25f);
+        canvas.DrawText(ending.Title, bounds.Position + Vector2.One * .25f);
 
         canvas.PushState();
         canvas.Translate(0, .6f);
