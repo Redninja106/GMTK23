@@ -51,7 +51,6 @@ internal class Boulder : IGameComponent, ISaveable, IInteractable, IFallable
         if (hasFallen)
             timeSinceFall += Time.DeltaTime;
 
-
         Avatar av = Program.World.Find<Avatar>();
         if (av.Transform.Position.X < this.transform.Position.X && timeSinceFall > 3f)
         {
@@ -77,6 +76,9 @@ internal class Boulder : IGameComponent, ISaveable, IInteractable, IFallable
 
     public void Fall()
     {
+        if (hasFallen)
+            return;
+
         this.transform.Position = new(35, 33);
         hasFallen = true;
 

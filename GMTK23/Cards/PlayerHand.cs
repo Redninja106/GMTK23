@@ -110,8 +110,7 @@ internal class PlayerHand : IGameComponent, ISaveable
 
         for (int i = Cards.Count - 1; i >= 0; i--)
         {
-            if (Cards[i].ContainsPoint(worldSpacePoint) ||
-                Cards[i].ContainsPoint(worldSpacePoint, Vector2.UnitY * -1f))
+            if (Cards[i].ContainsPoint(worldSpacePoint, -Vector2.UnitY * .5f))
                 return Cards[i];
         }
 

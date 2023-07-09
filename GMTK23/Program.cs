@@ -36,6 +36,8 @@ partial class Program : Simulation
         
         // Window.Title = "TANKS!";
         Time.MaxDeltaTime = 1 / 30f;
+
+        Window.Maximize();
     }
 
     public override void OnRender(ICanvas canvas)
