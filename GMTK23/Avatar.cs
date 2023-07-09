@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace GMTK23;
 
-internal class Avatar : IGameComponent, ISaveable, IFallable
+internal class Avatar : IGameComponent, ISaveable, IFallable, ICombustable, IWettable
 {
     public Transform Transform { get; set; }
     public Vector2 TargetPos { get; set; }
@@ -23,6 +23,13 @@ internal class Avatar : IGameComponent, ISaveable, IFallable
     private AvatarState?[] states;
     private ParticleSystem? bloodParticleSystem = null;
     private float timeSinceDeath = 0;
+    private ElementalState elementalState;
+    private float timeOnFire;
+
+    public void Kill()
+    {
+        AvatarState = null;
+    }
 
     public void NextState()
     {
@@ -42,6 +49,7 @@ internal class Avatar : IGameComponent, ISaveable, IFallable
             new MoveToFire(this),
             null
         };
+        elementalState = new(this);
         NextState();
     }
 
@@ -60,12 +68,24 @@ internal class Avatar : IGameComponent, ISaveable, IFallable
         }
         canvas.PopState();
         bloodParticleSystem?.Render(canvas);
+        elementalState.Render(canvas);
     }
 
     public void Update()
     {
         Vector2 v = GMTK23.Extensions.VectorExtensions.StepTowards(Transform.Position, TargetPos, WalkSpeed * Time.DeltaTime);
         Transform.Position = v;
+
+        if (elementalState.IsBurning)
+        {
+            timeOnFire += Time.DeltaTime;
+        }
+
+        if (timeOnFire > 2)
+        {
+            this.Fall();
+        }
+
         if (AvatarState != null)
         {
             AvatarState.Update();
@@ -77,10 +97,12 @@ internal class Avatar : IGameComponent, ISaveable, IFallable
             if (timeSinceDeath > 1 && bloodParticleSystem is null)
             {
                 bloodParticleSystem = new(new BloodParticleProvider(this));
-                bloodParticleSystem.Emitter.Burst(100);
+                bloodParticleSystem.Emitter.Burst(50);
+                bloodParticleSystem.Emitter.Rate = 10f;
             }
         }
         bloodParticleSystem?.Update();
+        elementalState.Update();
     }
 
     public void setTargetPos(Vector2 targetPos)
@@ -102,6 +124,9 @@ internal class Avatar : IGameComponent, ISaveable, IFallable
 
     public void Fall()
     {
+        if (AvatarState == null)
+            return;
+
         this.Transform.Rotation = Angle.ToRadians(90);
         this.TargetPos = new(Transform.Position.X + 3, Transform.Position.Y + 1);
         this.Transform.Position = new(Transform.Position.X + 3, Transform.Position.Y + 1);
@@ -117,6 +142,16 @@ internal class Avatar : IGameComponent, ISaveable, IFallable
         }
 
         return new Rectangle(Transform.Position, new(2, 3));
+    }
+
+    public void Drench()
+    {
+        this.elementalState.Drench();
+    }
+
+    public void Combust()
+    {
+        this.elementalState.Combust();
     }
 
     class BloodParticleProvider : IParticleProvider

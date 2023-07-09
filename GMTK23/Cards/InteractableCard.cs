@@ -64,7 +64,8 @@ internal class InteractableCard : IGameComponent
 
                 foreach (var interactable in interactables)
                 {
-                    var bounds = interactable.GetBounds();
+                    var realBounds = interactable.GetBounds();
+                    var bounds = new Rectangle(realBounds.GetAlignedPoint(Alignment.Center), Vector2.Max(new(7, 7), realBounds.Size), Alignment.Center);
 
                     if (bounds.ContainsPoint(Transform.LocalToWorld(Vector2.Zero)))
                     {
