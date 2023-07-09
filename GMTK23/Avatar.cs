@@ -24,15 +24,17 @@ internal class Avatar : IGameComponent, ISaveable, IFallable, ICombustable, IWet
     private float timeOnFire;
     public bool HasFallen { get; private set; }
     public Torch? torch;
+    private Ending? killedEnding;
 
     public void SetState(AvatarState state)
     {
         this.AvatarState = state;
     }
 
-    public void Kill()
+    public void Kill(Ending ending)
     {
         AvatarState = null;
+        this.killedEnding = ending;
         TargetPos = Transform.Position;
     }
 
@@ -73,14 +75,18 @@ internal class Avatar : IGameComponent, ISaveable, IFallable, ICombustable, IWet
 
         if (timeOnFire > 2)
         {
-            this.Fall();
+            this.Fall(Ending.QuickAndPainful);
         }
 
         Boulder b = Program.World.Find<Boulder>();
         if (b.GetBounds().Intersects(this.GetBounds())
             && AvatarState != null)
         {
-            AvatarState = new Idle(this);
+            if (b.transform.Position.X < this.Transform.Position.X)
+            {
+                GameStateManager.AchieveEnding(Ending.ShouldveRespawn);
+            }
+
             TargetPos = Transform.Position;
         }
 
@@ -102,6 +108,11 @@ internal class Avatar : IGameComponent, ISaveable, IFallable, ICombustable, IWet
 
         bloodParticleSystem?.Update();
         elementalState.Update();
+
+        if (timeSinceDeath > 3)
+        {
+            GameStateManager.AchieveEnding(this.killedEnding);
+        }
     }
 
     public void setTargetPos(Vector2 targetPos)
@@ -123,6 +134,11 @@ internal class Avatar : IGameComponent, ISaveable, IFallable, ICombustable, IWet
 
     public void Fall()
     {
+        Fall(Ending.ItsLikeBrawl);
+    }
+
+    public void Fall(Ending ending)
+    {
         if (AvatarState == null)
             return;
 
@@ -132,6 +148,7 @@ internal class Avatar : IGameComponent, ISaveable, IFallable, ICombustable, IWet
         this.TargetPos = this.Transform.Position;
         HasFallen = true;
         AvatarState = null;
+        this.killedEnding = ending;
     }
 
     public Rectangle GetBounds()
@@ -147,11 +164,27 @@ internal class Avatar : IGameComponent, ISaveable, IFallable, ICombustable, IWet
     public void Drench()
     {
         this.elementalState.Drench();
+
+        if (this.torch is not null)
+        {
+            if (this.torch.elementalState.IsBurning)
+            {
+            }
+
+            this.torch.elementalState.Drench();
+        }
     }
 
     public void Combust()
     {
         this.elementalState.Combust();
+
+        if (this.torch is not null)
+        {
+            this.torch.elementalState.Combust();
+
+            GameStateManager.AchieveEnding(Ending.ThatWasEasy);
+        }
     }
 
     class BloodParticleProvider : IParticleProvider

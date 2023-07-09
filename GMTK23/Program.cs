@@ -38,6 +38,7 @@ partial class Program : Simulation
         Time.MaxDeltaTime = 1 / 30f;
 
         Window.Maximize();
+        Window.Title = "Torch";
     }
 
     public override void OnRender(ICanvas canvas)
@@ -67,7 +68,13 @@ partial class Program : Simulation
         // Audio.Volume = vol;
 
         canvas.ResetState();
-        canvas.Clear(Color.FromHSV(0,0,.1f));
+        canvas.Clear(Color.FromHSV(0,0,0f));
+
+        var waypoint = World.Find<CameraWaypoint>();
+        if (waypoint is not null)
+        {
+            waypoint.Update();
+        }
 
         Camera.Update(canvas.Width, canvas.Height);
 

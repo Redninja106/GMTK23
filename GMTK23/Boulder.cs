@@ -54,7 +54,7 @@ internal class Boulder : IGameComponent, ISaveable, IInteractable, IFallable
         Avatar av = Program.World.Find<Avatar>();
         if (av.Transform.Position.X < this.transform.Position.X && timeSinceFall > 3f)
         {
-            av.Fall();
+            av.Fall(Ending.AvatarAsphyxiation);
         }
     }
 
@@ -88,7 +88,7 @@ internal class Boulder : IGameComponent, ISaveable, IInteractable, IFallable
         Avatar av = Program.World.Find<Avatar>();
         if (this.GetBounds().Intersects(av.GetBounds()))
         {
-            av.Kill();
+            av.Kill(Ending.DeathFromAbove);
         }
 
     }
