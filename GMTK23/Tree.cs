@@ -1,4 +1,5 @@
 ﻿using GMTK23.Interactions;
+using GMTK23.Particles;
 using GMTK23.Tiles;
 using System;
 using System.Collections.Generic;
@@ -64,9 +65,13 @@ internal class Tree : IGameComponent, ISaveable, IFallable, IWettable, ICombusta
         this.transform.Rotation = Angle.ToRadians(-90);
         this.transform.Position = new(80, 49);
         isFallen = true;
-        // do a player hit test
-        // if success kill player
-        //      avatar.kill("tree")
+
+        var avatar = Program.World.Find<Avatar>();
+
+        if (this.GetBounds().Intersects(avatar.GetBounds()))
+        {
+            avatar.Fall();
+        }
     }
 
     public void Combust()

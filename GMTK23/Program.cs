@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Numerics;
 using GMTK23;
 using GMTK23.Particles;
+using SimulationFramework.AudioExtensions.Windows;
 
 new Program().Run(new DesktopPlatform());
 
@@ -25,7 +26,7 @@ partial class Program : Simulation
 
     public override void OnInitialize()
     {
-        // Application.RegisterComponent<WindowsAudioProvider>(new());
+        Application.RegisterComponent<WindowsAudioProvider>(new());
 
         Camera = new(15);
         Inspector = new();

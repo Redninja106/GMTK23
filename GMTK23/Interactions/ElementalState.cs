@@ -1,4 +1,5 @@
 ﻿using GMTK23.Particles;
+using SimulationFramework.AudioExtensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,9 +15,13 @@ internal class ElementalState
     private IElementalParticleProvider particleProvider;
     public ParticleSystem particleSystem;
     public IInteractable interactable;
+    private static ISound? fireSound = null;
+    private SoundPlayback? fireSoundPlayback = null;
 
     public ElementalState(IInteractable interactable, bool initiallyBurning = false, bool initiallyWet = false)
     {
+        fireSound ??= Audio.LoadSound("./Assets/Sounds/fireplace.wav");
+
         this.interactable = interactable;
         particleSystem = new(null);
 
@@ -34,6 +39,8 @@ internal class ElementalState
     {
         if (IsWet)
             return;
+
+        // fireSoundPlayback = fireSound!.Play();
 
         IsBurning = true;
         var bounds = this.interactable.GetBounds();

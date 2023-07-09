@@ -16,16 +16,19 @@ internal class Avatar : IGameComponent, ISaveable, IFallable, ICombustable, IWet
     public Vector2 TargetPos { get; set; }
     public float WalkSpeed { get; set; } = 5;
     public ITexture sprite;
-    public bool hasTorch = false;
     public AvatarState? AvatarState { get; private set; }
     public bool IsAtTarget => this.Transform.Position == TargetPos;
-    private int currentStateIndex = -1;
-    private AvatarState?[] states;
     private ParticleSystem? bloodParticleSystem = null;
     private float timeSinceDeath = 0;
     private ElementalState elementalState;
     private float timeOnFire;
     private bool hasFallen;
+    public Torch? torch;
+
+    public void SetState(AvatarState state)
+    {
+        this.AvatarState = state;
+    }
 
     public void Kill()
     {
@@ -33,26 +36,14 @@ internal class Avatar : IGameComponent, ISaveable, IFallable, ICombustable, IWet
         TargetPos = Transform.Position;
     }
 
-    public void NextState()
-    {
-        currentStateIndex++;
-        AvatarState = states[currentStateIndex];
-    }
-
     public Avatar(Transform transform)
     {
         Transform = transform;
         TargetPos = transform.Position;
         sprite = Graphics.LoadTexture("./Assets/dude.png");
-        states = new AvatarState?[]
-        {
-            new MoveToTreeState(this),
-            new MineTreeState(this),
-            new MoveToFire(this),
-            null
-        };
+        
         elementalState = new(this);
-        NextState();
+        SetState(new MoveToTreeState(this));
     }
 
     public RenderLayer RenderLayer => RenderLayer.Avatar;
@@ -62,13 +53,8 @@ internal class Avatar : IGameComponent, ISaveable, IFallable, ICombustable, IWet
         canvas.PushState();
         canvas.ApplyTransform(Transform);
         canvas.DrawTexture(sprite, 0, 0, 2, 3);
-        if (hasTorch)
-        {
-            canvas.Fill(new Color(92, 78, 46));
-            canvas.StrokeWidth(.25f);
-            canvas.DrawLine(2,2,3,.5f);
-        }
         canvas.PopState();
+        torch?.Render(canvas);
         bloodParticleSystem?.Render(canvas);
         elementalState.Render(canvas);
     }
@@ -77,6 +63,8 @@ internal class Avatar : IGameComponent, ISaveable, IFallable, ICombustable, IWet
     {
         Vector2 v = GMTK23.Extensions.VectorExtensions.StepTowards(Transform.Position, TargetPos, WalkSpeed * Time.DeltaTime);
         Transform.Position = v;
+
+        torch?.Update();
 
         if (elementalState.IsBurning)
         {
@@ -111,6 +99,7 @@ internal class Avatar : IGameComponent, ISaveable, IFallable, ICombustable, IWet
                 bloodParticleSystem.Emitter.Rate = 10f;
             }
         }
+
         bloodParticleSystem?.Update();
         elementalState.Update();
     }
@@ -195,4 +184,39 @@ internal class Avatar : IGameComponent, ISaveable, IFallable, ICombustable, IWet
         }
     }
 
+}
+
+class Torch : IInteractable
+{
+    public ElementalState elementalState;
+    private Avatar avatar;
+
+    public Torch(Avatar avatar, bool startsWet, bool startsFlaming)
+    {
+        this.avatar = avatar;
+        elementalState = new(this, startsFlaming, startsWet);
+    }
+
+    public RenderLayer RenderLayer => RenderLayer.Avatar;
+
+    public Rectangle GetBounds()
+    {
+        return new(avatar.Transform.Position + new Vector2(3, .5f), new(.1f, .1f), Alignment.Center);
+    }
+
+    public void Render(ICanvas canvas)
+    {
+        canvas.PushState();
+        canvas.ApplyTransform(avatar.Transform);
+        canvas.Fill(new Color(92, 78, 46));
+        canvas.StrokeWidth(.25f);
+        canvas.DrawLine(2, 2, 3, .5f);
+        canvas.PopState();
+        elementalState.Render(canvas);
+    }
+
+    public void Update()
+    {
+        elementalState.Update();
+    }
 }
