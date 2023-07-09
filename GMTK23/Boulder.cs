@@ -55,7 +55,7 @@ internal class Boulder : IGameComponent, ISaveable, IInteractable, IFallable
         Avatar av = Program.World.Find<Avatar>();
         if (this.GetBounds().Intersects(av.GetBounds()))
         {
-            av.kill();
+            av.Kill();
         }
     }
 }
