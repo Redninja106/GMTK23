@@ -173,7 +173,7 @@ internal class Inspector
                 LayoutEnumerable(name, enumerable);
                 return;
             case Enum @enum:
-                @enum = LayoutEnum(name, @enum);
+                @enum = LayoutEnum(name, isReadonly, @enum)!;
                 if (!isReadonly)
                     fieldInfo.SetValue(obj, @enum);
                 return;
@@ -183,14 +183,22 @@ internal class Inspector
         }
     }
 
-    private Enum LayoutEnum(string name, Enum enumValue)
+    private Enum LayoutEnum(string name, bool isReadonly, Enum enumValue)
     {
-        var values = Enum.GetValues(enumValue.GetType());
-        var names = Enum.GetNames(enumValue.GetType());
+        if (isReadonly)
+        {
+            ImGui.Text($"{name}: {enumValue}");
+            return null;
+        }
+        else
+        {
+            var values = Enum.GetValues(enumValue.GetType());
+            var names = Enum.GetNames(enumValue.GetType());
 
-        int index = Array.IndexOf(values, enumValue);
-        ImGui.Combo(name, ref index, names, names.Length);
-        return (Enum)values.GetValue(index);
+            int index = Array.IndexOf(values, enumValue);
+            ImGui.Combo(name, ref index, names, names.Length);
+            return (Enum)values.GetValue(index)!;
+        }
     }
 
     private void LayoutButton(object obj, MethodInfo method)
