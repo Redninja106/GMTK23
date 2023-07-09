@@ -25,6 +25,7 @@ internal class Avatar : IGameComponent, ISaveable, IFallable, ICombustable, IWet
     private float timeSinceDeath = 0;
     private ElementalState elementalState;
     private float timeOnFire;
+    private bool hasFallen;
 
     public void Kill()
     {
@@ -131,12 +132,13 @@ internal class Avatar : IGameComponent, ISaveable, IFallable, ICombustable, IWet
         this.TargetPos = new(Transform.Position.X + 3, Transform.Position.Y + 1);
         this.Transform.Position = new(Transform.Position.X + 3, Transform.Position.Y + 1);
         this.TargetPos = this.Transform.Position;
+        hasFallen = true;
         AvatarState = null;
     }
 
     public Rectangle GetBounds()
     {
-        if (AvatarState is null)
+        if (hasFallen)
         {
             return new Rectangle(Transform.Position, new(3, 2), Alignment.TopRight);
         }
