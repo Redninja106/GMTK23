@@ -4,19 +4,20 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GMTK23.Interactions;
 
 namespace GMTK23.Cards;
 internal class InteractableCard : IGameComponent
 {
     public Transform Transform { get; } = new();
     public Transform TargetTransform { get; } = new();
+    public PlayableCard PlayableCard = new FallCard();
 
     public bool isDragging;
     private Vector2 dragOffset;
 
     public float Smoothing { get; set; } = 8;
     public RenderLayer RenderLayer => RenderLayer.Cards;
-    public Color color = Color.FromHSV(Random.Shared.NextSingle(), 1f, 1f);
 
     public InteractableCard()
     {
@@ -24,9 +25,24 @@ internal class InteractableCard : IGameComponent
 
     public void Render(ICanvas canvas)
     {
+        const float cardWidth = .7f;
+        const float cardHeight = 1f;
+        const float borderSize = .01f;
+
+        canvas.PushState();
+        canvas.Antialias(true);
         canvas.ApplyTransform(Transform);
-        canvas.Fill(color);
-        canvas.DrawRect(0, 0, .7f, 1, Alignment.Center);
+
+        canvas.Fill(new Color(0, 0, 0, 127));
+        canvas.DrawRect(0, 0, cardWidth + borderSize * 2, cardHeight + borderSize * 2, Alignment.Center);
+
+        canvas.Fill(new Color(0xaa, 0x95, 0x68));
+        canvas.DrawRect(0, 0, cardWidth, cardHeight, Alignment.Center);
+
+        canvas.Fill(new Color(0x50, 0x50, 0x50));
+        canvas.FontStyle(.2f, FontStyle.Normal);
+        canvas.DrawText(PlayableCard.Name, -(cardWidth / 2f -.05f), -(cardHeight / 2f - .05f));
+        canvas.PopState();
     }
 
     public void Update()
@@ -50,7 +66,7 @@ internal class InteractableCard : IGameComponent
 
                     if (bounds.ContainsPoint(Transform.LocalToWorld(Vector2.Zero)))
                     {
-                        
+                        PlayableCard.Interact(interactable);
                     }
                 }
 
@@ -59,6 +75,7 @@ internal class InteractableCard : IGameComponent
 
             TargetTransform.Position = mousePos;
             TargetTransform.Rotation = 0;
+            TargetTransform.Scale = new(7.5f, 7.5f);
         }
         else
         {

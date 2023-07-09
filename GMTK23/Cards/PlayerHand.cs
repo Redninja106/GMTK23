@@ -6,13 +6,15 @@ using System.Threading.Tasks;
 
 namespace GMTK23.Cards;
 
-internal class PlayerHand : IGameComponent
+internal class PlayerHand : IGameComponent, ISaveable
 {
     public List<InteractableCard> Cards { get; set; }
     public Transform Transform { get; } = new();
 
-    public PlayerHand()
+    public PlayerHand(Transform transform, float scale)
     {
+        this.Transform = transform;
+        this.scale = scale;
     }
 
     public float offset = .4f;
@@ -42,7 +44,10 @@ internal class PlayerHand : IGameComponent
 
         var mousePosition = Program.Camera.ScreenToWorld(Mouse.Position);
         this.SelectedCard = GetCard(mousePosition);
-        var selectedCardIndex = (SelectedCard is null || (!SelectionEnabled)) ? -1 : Cards.IndexOf(SelectedCard);
+
+        bool isSelecting = SelectionEnabled && SelectedCard is not null && !Cards.Any(c => c.isDragging);
+
+        var selectedCardIndex = isSelecting ? Cards.IndexOf(SelectedCard!) : -1;
 
         for (int i = 0; i < Cards.Count; i++)
         {
@@ -102,9 +107,18 @@ internal class PlayerHand : IGameComponent
         return null;
     }
 
-    public void Initalize()
+    public IEnumerable<string> Save()
     {
+        yield return Transform.ToString();
+        yield return scale.ToString();
+    }
 
+    public static IGameComponent Load(ArgReader reader)
+    {
+        var transform = reader.NextTransform();
+        var scale = reader.NextFloat();
+
+        return new PlayerHand(transform, scale);
     }
 
     // public InteractableCard? GetCard(Card card)

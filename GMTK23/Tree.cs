@@ -1,4 +1,4 @@
-﻿using GMTK23.Cards;
+﻿using GMTK23.Interactions;
 using GMTK23.Tiles;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace GMTK23;
-internal class Tree : IGameComponent, ISaveable, IInteractable
+internal class Tree : IGameComponent, ISaveable, IInteractable, IFallable
 {
     public TileMap tileMap;
     public RenderLayer RenderLayer => tileMap.RenderLayer;
@@ -44,5 +44,15 @@ internal class Tree : IGameComponent, ISaveable, IInteractable
     public Rectangle GetBounds()
     {
         return new Rectangle(transform.Position, new(tileMap.Width, tileMap.Height));
+    }
+
+    public void Fall()
+    {
+        this.transform.Rotation = Angle.ToRadians(-90);
+        this.transform.Position = new(92, 47);
+
+        // do a player hit test
+        // if success kill player
+        //      avatar.kill("tree")
     }
 }
