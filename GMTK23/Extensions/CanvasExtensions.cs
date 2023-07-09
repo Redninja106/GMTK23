@@ -12,5 +12,6 @@ internal static class CanvasExtensions
     {
         canvas.Translate(transform.Position);
         canvas.Rotate(transform.Rotation);
+        canvas.Scale(transform.Scale);
     }
 }

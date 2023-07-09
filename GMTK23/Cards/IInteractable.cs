@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace GMTK23.Cards;
-internal interface IInteractable
+internal interface IInteractable : IGameComponent
 {
     Rectangle GetBounds();
 }

@@ -20,7 +20,7 @@ internal class PlayerHand : IGameComponent
     public float breadthStrength = 1.05f;
     public float breadthUpper = Angle.ToRadians(90f);
     public float breadthLower = Angle.ToRadians(10f);
-    public float scale = 1f;
+    public float scale = 5f;
 
     public event Action<InteractableCard>? OnCardSelected;
     public bool SelectionEnabled { get; set; } = true;
@@ -55,7 +55,7 @@ internal class PlayerHand : IGameComponent
 
             if (selectedCardIndex is not -1 && selectedCardIndex != (Cards.Count - 1))
             {
-                float diff = (increment / -2f) + scale * Angle.ToRadians(12.5f / radius);
+                float diff = (increment / -2f) + Angle.ToRadians(12.5f / radius);
 
                 if (i <= selectedCardIndex)
                 {
@@ -67,9 +67,10 @@ internal class PlayerHand : IGameComponent
                 }
             }
 
+            this.Transform.Scale = new(scale, scale);
             card.TargetTransform.Position = this.Transform.Position + scale * (Vector2.UnitY * (radius - offset) + Angle.ToVector(angle) * radius);
             card.TargetTransform.Rotation = angle + (MathF.PI / 2f);
-            card.TargetTransform.Scale = new(scale, scale);
+            card.TargetTransform.Scale = this.Transform.Scale;
 
             if (SelectionEnabled && card == SelectedCard)
             {

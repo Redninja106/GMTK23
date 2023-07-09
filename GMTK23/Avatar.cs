@@ -23,7 +23,6 @@ internal class Avatar : IGameComponent, ISaveable
 
     public void Update()
     {
-
     }
 
     public void setTargetPos(Vector2 targetPos)
