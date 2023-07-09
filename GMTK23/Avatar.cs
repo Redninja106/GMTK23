@@ -88,6 +88,14 @@ internal class Avatar : IGameComponent, ISaveable, IFallable, ICombustable, IWet
             this.Fall();
         }
 
+        Boulder b = Program.World.Find<Boulder>();
+        if (b.GetBounds().Intersects(this.GetBounds())
+            && AvatarState != null)
+        {
+            AvatarState = new Idle(this);
+            TargetPos = Transform.Position;
+        }
+
         if (AvatarState != null)
         {
             AvatarState.Update();

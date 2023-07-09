@@ -44,7 +44,7 @@ class MineTreeState : AvatarState
         if (startTime == 0)
         {
             startTime = Time.TotalTime;
-            endTime = startTime + 15;
+            endTime = startTime + 10;
         }
 
         if (endTime != 0
@@ -65,4 +65,9 @@ class MoveToFire : AvatarState
         var fire = Program.World.Find<LogFire>();
         Avatar.TargetPos = new Vector2(fire.transform.Position.X + 4, Avatar.Transform.Position.Y);
     }
+}
+
+class Idle : AvatarState
+{
+    public Idle(Avatar avatar) : base(avatar) { } public override void Update() { }
 }
