@@ -18,6 +18,7 @@ internal class InteractableCard : IGameComponent
 
     public float Smoothing { get; set; } = 15;
     public RenderLayer RenderLayer => RenderLayer.Cards;
+    private Rectangle? interactableCollider;
 
     public InteractableCard(PlayableCard playableCard, Vector2 initialPosition)
     {
@@ -30,6 +31,12 @@ internal class InteractableCard : IGameComponent
         const float cardWidth = .7f;
         const float cardHeight = 1f;
         const float borderSize = .01f;
+
+        if (interactableCollider is not null)
+        {
+            canvas.Stroke(new(100, 100, 100, 100));
+            canvas.DrawRect(interactableCollider.Value);
+        }
 
         canvas.PushState();
         canvas.Antialias(true);
@@ -59,22 +66,26 @@ internal class InteractableCard : IGameComponent
 
         if (isDragging)
         {
-            if (Mouse.IsButtonReleased(MouseButton.Left))
+            var interactables = Program.World.FindAll<IInteractable>();
+            interactableCollider = null;
+
+            foreach (var interactable in interactables)
             {
-                var interactables = Program.World.FindAll<IInteractable>();
+                var realBounds = interactable.GetBounds();
+                var bounds = new Rectangle(realBounds.GetAlignedPoint(Alignment.Center), Vector2.Max(new(7, 7), realBounds.Size), Alignment.Center);
 
-                foreach (var interactable in interactables)
+                if (bounds.ContainsPoint(Transform.LocalToWorld(Vector2.Zero)))
                 {
-                    var realBounds = interactable.GetBounds();
-                    var bounds = new Rectangle(realBounds.GetAlignedPoint(Alignment.Center), Vector2.Max(new(7, 7), realBounds.Size), Alignment.Center);
-
-                    if (bounds.ContainsPoint(Transform.LocalToWorld(Vector2.Zero)))
+                    if (Mouse.IsButtonReleased(MouseButton.Left))
                     {
                         PlayableCard.Interact(interactable);
+                        isDragging = false;
+                    }
+                    else
+                    {
+                        interactableCollider = bounds;
                     }
                 }
-
-                isDragging = false;
             }
 
             TargetTransform.Position = mousePos;
