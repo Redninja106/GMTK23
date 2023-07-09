@@ -78,7 +78,7 @@ internal class InteractableCard : IGameComponent
 
             TargetTransform.Position = mousePos;
             TargetTransform.Rotation = 0;
-            TargetTransform.Scale = new(7.5f, 7.5f);
+            TargetTransform.Scale = new(5f, 5f);
         }
         else
         {

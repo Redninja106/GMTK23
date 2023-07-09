@@ -98,7 +98,16 @@ class LightTorch : AvatarState
 
         if (activeTime > 2)
         {
-            Avatar.torch!.elementalState.Combust();
+            var fire = Program.World.Find<LogFire>();
+            if (fire!.elementalState.IsBurning)
+            {
+                Avatar.torch!.elementalState.Combust();
+                // TODO ending
+            }
+            else
+            {
+                // TODO ending
+            }
         }
     }
 }
@@ -107,5 +116,8 @@ class Idle : AvatarState
 {
     public Idle(Avatar avatar) : base(avatar) { } 
     
-    public override void Update() { }
+    public override void Update() 
+    {
+        // TODO ending (s)
+    }
 }

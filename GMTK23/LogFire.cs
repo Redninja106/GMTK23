@@ -13,7 +13,7 @@ internal class LogFire : IGameComponent, ISaveable, IWettable
     public TileMap tileMap;
     public RenderLayer RenderLayer => tileMap.RenderLayer;
     public Transform transform;
-    private ElementalState elementalState;
+    public ElementalState elementalState;
 
     public LogFire(Transform transform, TileMap tileMap)
     {

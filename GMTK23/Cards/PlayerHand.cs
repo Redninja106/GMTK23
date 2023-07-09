@@ -27,7 +27,7 @@ internal class PlayerHand : IGameComponent, ISaveable
 
     public float offset = .4f;
     public float radius = 2f;
-    public float breadthStrength = 1.05f;
+    public float breadthStrength = 1.7f;
     public float breadthUpper = Angle.ToRadians(90f);
     public float breadthLower = Angle.ToRadians(10f);
     public float scale = 5f;

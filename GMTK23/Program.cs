@@ -79,7 +79,7 @@ partial class Program : Simulation
         World.Render(canvas);
         canvas.PopState();
 
-        canvas.DrawText(Performance.Framerate.ToString("f0"), new(Camera.DisplayWidth, 0), Alignment.TopRight);
+        // canvas.DrawText(Performance.Framerate.ToString("f0"), new(Camera.DisplayWidth, 0), Alignment.TopRight);
     }
 
     public static void ReloadLevel(string path)
