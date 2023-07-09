@@ -51,10 +51,17 @@ internal class Boulder : IGameComponent, ISaveable, IInteractable, IFallable
     {
         this.transform.Position = new(35, 33);
 
+        // fill cave with smoke
+
         Avatar av = Program.World.Find<Avatar>();
         if (this.GetBounds().Intersects(av.GetBounds()))
         {
             av.Kill();
+        }
+
+        if (av.Transform.Position.X < this.transform.Position.X)
+        {
+            // kill avatar after a sec
         }
     }
 }
