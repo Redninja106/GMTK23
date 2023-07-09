@@ -1,5 +1,8 @@
 ***GMTK Game Jam 2023 entry.***
 
+## Itch.io link
+https://shashaman26.itch.io/torch
+
 ## What is Torch?
 
 Torch is a 2D survival game akin to Terraria. However, your goal is not to explore, cultivate, and conquer the game world; rather you are the game itself, fighting the player back from progressing. 10+ endings!
