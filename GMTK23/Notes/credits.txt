@@ -4,4 +4,3 @@
 	Silk.NET
 	NAudio
 Assets:
-	platformer art extended tileset - https://kenney.nl/assets/platformer-art-extended-tileset

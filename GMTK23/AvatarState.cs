@@ -54,11 +54,7 @@ class MineTreeState : AvatarState
         {
             Avatar.torch = new(Avatar, tree!.elementalState.IsWet, tree!.elementalState.IsBurning); 
 
-            if (Avatar.torch.elementalState.IsBurning)
-            {
-                Avatar.SetState(new Idle(this.Avatar));
-            }
-            else
+            if (!Avatar.torch.elementalState.IsBurning)
             {
                 Avatar.SetState(new MoveToFire(this.Avatar));
             }
@@ -75,7 +71,7 @@ class MoveToFire : AvatarState
     public override void Update()
     {
         var fire = Program.World.Find<LogFire>();
-        Avatar.TargetPos = new Vector2(fire.transform.Position.X + 4, Avatar.Transform.Position.Y);
+        Avatar.TargetPos = new Vector2(fire!.transform.Position.X + 4, Avatar.Transform.Position.Y);
 
         if (Avatar.IsAtTarget)
         {
@@ -101,12 +97,19 @@ class LightTorch : AvatarState
             var fire = Program.World.Find<LogFire>();
             if (fire!.elementalState.IsBurning)
             {
-                Avatar.torch!.elementalState.Combust();
-                // TODO ending
+                if (Avatar.torch!.elementalState.IsWet)
+                {
+                    GameStateManager.AchieveEnding(Ending.StickySituation);
+                }
+                else
+                {
+                    Avatar.torch!.elementalState.Combust();
+                    GameStateManager.AchieveEnding(Ending.RoleRevised);
+                }
             }
             else
             {
-                // TODO ending
+                GameStateManager.AchieveEnding(Ending.DampenedDreams);
             }
         }
     }
@@ -114,10 +117,15 @@ class LightTorch : AvatarState
 
 class Idle : AvatarState
 {
-    public Idle(Avatar avatar) : base(avatar) { } 
+    private Ending ending;
+
+    public Idle(Avatar avatar, Ending ending) : base(avatar) 
+    {
+        this.ending = ending;
+    } 
     
     public override void Update() 
     {
-        // TODO ending (s)
+        GameStateManager.AchieveEnding(ending);
     }
 }

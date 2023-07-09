@@ -70,7 +70,7 @@ internal class Tree : IGameComponent, ISaveable, IFallable, IWettable, ICombusta
 
         if (this.GetBounds().Intersects(avatar.GetBounds()))
         {
-            avatar.Fall();
+            avatar.Fall(Ending.NoOneHeard);
         }
     }
 

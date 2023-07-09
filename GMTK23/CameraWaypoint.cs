@@ -29,9 +29,11 @@ internal class CameraWaypoint : IGameComponent, ISaveable
         if (!Active)
             return;
 
+        float edgeDist = MathF.Min(0, TargetTransform.Position.X - Program.Camera.HorizontalSize / 2f);
         float lerpFactor = MathUtils.TimescaledLerpFactor(Smoothing, Time.DeltaTime);
-        Program.Camera.Transform.LerpTowards(TargetTransform, lerpFactor);
-        Program.Camera.VerticalSize = MathHelper.Lerp(Program.Camera.VerticalSize, TargetSize, lerpFactor); 
+        Program.Camera.Transform.LerpTowards(TargetTransform.Translated(Vector2.UnitX * -edgeDist), lerpFactor);
+        Program.Camera.VerticalSize = MathHelper.Lerp(Program.Camera.VerticalSize, TargetSize, lerpFactor);
+
     }
 
     public IEnumerable<string> Save()

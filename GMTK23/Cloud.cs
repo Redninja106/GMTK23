@@ -65,7 +65,7 @@ internal class Cloud : IGameComponent, ISaveable, IInteractable, IFallable
             && av != null 
             && av.Transform.Position == av.TargetPos)
         {
-            av.Kill();
+            av.Kill(Ending.CelestialKidnapping);
         }
 
         elementalState.Update();
