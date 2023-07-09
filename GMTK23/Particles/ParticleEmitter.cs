@@ -13,7 +13,6 @@ internal class ParticleEmitter : IPositionable
     public Vector2 Velocity;
     public float AngularVelocity;
 
-
     ParticleSystem system;
 
     public IParticleProvider ParticleProvider { get; set; }
@@ -21,14 +20,21 @@ internal class ParticleEmitter : IPositionable
 
     private float lastParticle;
 
-    public ParticleEmitter(ParticleSystem system)
+    public ParticleEmitter(ParticleSystem system, IParticleProvider particleProvider)
     {
         lastParticle = Time.TotalTime;
         this.system = system;
+        this.ParticleProvider = particleProvider;
     }
 
     public void Update()
     {
+        if (ParticleProvider is null)
+        {
+            lastParticle = Time.TotalTime;
+            return;
+        }
+
         float timeSinceParticle = Time.TotalTime - lastParticle;
 
         float freq = (1f / Rate);
@@ -45,6 +51,9 @@ internal class ParticleEmitter : IPositionable
 
     public void Burst(int count)
     {
+        if (ParticleProvider is null)
+            return;
+
         for (int i = 0; i < count; i++)
         {
             system.Add(ParticleProvider.CreateParticle(this));

@@ -15,9 +15,9 @@ internal class ParticleSystem : IGameComponent
 
     public RenderLayer RenderLayer => RenderLayer.Particles;
 
-    public ParticleSystem()
+    public ParticleSystem(IParticleProvider? particleProvider)
     {
-        Emitter = new(this);
+        Emitter = new(this, particleProvider);
         particles = new();
     }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.WebSockets;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -36,7 +37,21 @@ internal class PlayerHand : IGameComponent, ISaveable
 
     public void Update()
     {
-        Cards ??= Program.World.FindAll<InteractableCard>().ToList();
+        if (Cards is null)
+        {
+
+            Cards = new()
+            {
+                new InteractableCard(new CombustCard()),
+                new InteractableCard(new DrenchCard()),
+                new InteractableCard(new FallCard()),
+            };
+
+            foreach (var card in Cards)
+            {
+                Program.World.Add(card);
+            }
+        }
 
         float breadth = breadthUpper - (breadthUpper - breadthLower) / MathF.Pow(breadthStrength, (Cards.Count - 2));
         float increment = (breadth / Cards.Count);

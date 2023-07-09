@@ -14,11 +14,13 @@ internal class Avatar : IGameComponent, ISaveable, IFallable
     public Transform Transform { get; set; }
     public Vector2 TargetPos { get; set; }
     public float WalkSpeed { get; set; } = 5;
+    public ITexture sprite;
 
     public Avatar(Transform transform)
     {
         Transform = transform;
         TargetPos = new Vector2(97, Transform.Position.Y);
+        sprite = Graphics.LoadTexture("./Assets/dude.png");
     }
 
     public RenderLayer RenderLayer => RenderLayer.Avatar;
@@ -26,7 +28,7 @@ internal class Avatar : IGameComponent, ISaveable, IFallable
     public void Render(ICanvas canvas)
     {
         canvas.ApplyTransform(Transform);
-        canvas.DrawRect(0, 0, 2, 3);
+        canvas.DrawTexture(sprite, 0, 0, 2, 3);
     }
 
     public void Update()

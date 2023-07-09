@@ -19,7 +19,7 @@ internal class TileManager
     {
         Add(new SolidTile(1, Color.Gray));
         Add(new SolidTile(2, Color.Green));
-        Add(new SolidTile(3, Color.Blue));
+        Add(new SolidTile(3, Color.CornflowerBlue));
         Add(new SolidTile(4, Color.Black));
         Add(new SolidTile(5, new Color(92, 78, 46)));
         Add(new SolidTile(6, new Color(61, 61, 61)));

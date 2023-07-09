@@ -11,12 +11,14 @@ internal abstract class PlayableCard
     public ITexture? Texture = null;
     public string Name { get; set; }
     public string Description { get; set; }
+    public Color Color { get; set; }
 
-    public PlayableCard(ITexture? texture, string name, string description)
+    public PlayableCard(ITexture? texture, string name, string description, Color color)
     {
         Texture = texture;
         Name = name;
         Description = description;
+        this.Color = color;
     }
 
     public abstract void Interact(IInteractable interactable);
@@ -24,7 +26,7 @@ internal abstract class PlayableCard
 
 class FallCard : PlayableCard
 {
-    public FallCard() : base(null, "Fall", "")
+    public FallCard() : base(null, "Fall", "", new Color(0xaa, 0x95, 0x68))
     {
     }
 
@@ -39,7 +41,7 @@ class FallCard : PlayableCard
 
 class CombustCard : PlayableCard
 {
-    public CombustCard() : base(null, "Combust", "")
+    public CombustCard() : base(null, "Combust", "", new Color(0xdb, 0x66, 0x18))
     {
     }
 
@@ -54,7 +56,7 @@ class CombustCard : PlayableCard
 
 class DrenchCard : PlayableCard
 {
-    public DrenchCard() : base(null, "Drench", "")
+    public DrenchCard() : base(null, "Drench", "", new Color(0x1b, 0x99, 0xe2))
     {
     }
 

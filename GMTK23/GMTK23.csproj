@@ -25,5 +25,11 @@
   <ItemGroup>
     <ProjectReference Include="..\SimulationFramework.AudioExtensions\SimulationFramework.AudioExtensions.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Assets\dude.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 	
 </Project>

@@ -2,16 +2,18 @@
 using GMTK23.Tiles;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace GMTK23;
-internal class Tree : IGameComponent, ISaveable, IInteractable, IFallable
+internal class Tree : IGameComponent, ISaveable, IFallable, IWettable, ICombustable
 {
     public TileMap tileMap;
     public RenderLayer RenderLayer => tileMap.RenderLayer;
     public Transform transform;
+    public ElementalState elementalState;
 
     public Tree(Transform transform, TileMap tileMap)
     {
@@ -54,5 +56,15 @@ internal class Tree : IGameComponent, ISaveable, IInteractable, IFallable
         // do a player hit test
         // if success kill player
         //      avatar.kill("tree")
+    }
+
+    public void Combust()
+    {
+        elementalState.Combust();
+    }
+
+    public void Drench()
+    {
+        elementalState.Drench();
     }
 }

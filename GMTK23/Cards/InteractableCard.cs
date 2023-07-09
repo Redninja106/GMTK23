@@ -11,16 +11,17 @@ internal class InteractableCard : IGameComponent
 {
     public Transform Transform { get; } = new();
     public Transform TargetTransform { get; } = new();
-    public PlayableCard PlayableCard = new FallCard();
+    public PlayableCard PlayableCard;
 
     public bool isDragging;
     private Vector2 dragOffset;
 
-    public float Smoothing { get; set; } = 8;
+    public float Smoothing { get; set; } = 15;
     public RenderLayer RenderLayer => RenderLayer.Cards;
 
-    public InteractableCard()
+    public InteractableCard(PlayableCard playableCard)
     {
+        this.PlayableCard = playableCard;
     }
 
     public void Render(ICanvas canvas)
@@ -36,12 +37,13 @@ internal class InteractableCard : IGameComponent
         canvas.Fill(new Color(0, 0, 0, 127));
         canvas.DrawRect(0, 0, cardWidth + borderSize * 2, cardHeight + borderSize * 2, Alignment.Center);
 
-        canvas.Fill(new Color(0xaa, 0x95, 0x68));
+        canvas.Fill(PlayableCard.Color);
         canvas.DrawRect(0, 0, cardWidth, cardHeight, Alignment.Center);
 
         canvas.Fill(new Color(0x50, 0x50, 0x50));
-        canvas.FontStyle(.2f, FontStyle.Normal);
-        canvas.DrawText(PlayableCard.Name, -(cardWidth / 2f -.05f), -(cardHeight / 2f - .05f));
+
+        canvas.FontStyle(.15f, FontStyle.Normal);
+        canvas.DrawText(PlayableCard.Name, 0, -(cardHeight / 2f - .05f), Alignment.TopCenter);
         canvas.PopState();
     }
 

@@ -5,17 +5,19 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace GMTK23.Particles;
-internal class RandomParticleProvider : IParticleProvider
+internal class RandomAreaParticleProvider : IParticleProvider
 {
     Random rng = new();
+    public float AreaWidth;
+    public float AreaHeight;
 
     public Particle CreateParticle(ParticleEmitter emitter)
     {
         return new()
         {
             transform = new(
-                emitter.Transform.Position.X + rng.NextSingle(),
-                emitter.Transform.Position.Y + rng.NextSingle(),
+                emitter.Transform.Position.X + rng.NextSingle() * AreaWidth,
+                emitter.Transform.Position.Y + rng.NextSingle() * AreaHeight,
                 emitter.Transform.Rotation + rng.NextSingle() * MathF.Tau
                 ),
             angularVelocity = rng.NextSingle(),
