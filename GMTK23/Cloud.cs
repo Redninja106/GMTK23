@@ -18,6 +18,7 @@ internal class Cloud : IGameComponent, ISaveable, IInteractable, IFallable
     public float fallSpeed = 8;
     public Boolean fallen = false;
     private ElementalState elementalState;
+    public Avatar av;
 
     public Cloud(Transform transform, TileMap tileMap)
     {
@@ -51,16 +52,17 @@ internal class Cloud : IGameComponent, ISaveable, IInteractable, IFallable
             targetPos = returnPos;
         }
 
-        Avatar av = Program.World.Find<Avatar>();
         if (this.GetBounds().Intersects(Program.World.Find<Avatar>().GetBounds()))
         {
+            av = Program.World.Find<Avatar>();
             av.Transform = new Transform(transform.Position.X+6,transform.Position.Y+1,0);
             av.setTargetPos(new Vector2(returnPos.X + 6, returnPos.Y+1));
             av.WalkSpeed = fallSpeed;
-            this.setTargetPos(returnPos);
+            this.setTargetPos(returnPos); 
         }
 
         if (transform.Position == targetPos
+            && av != null 
             && av.Transform.Position == av.TargetPos)
         {
             av.Kill();

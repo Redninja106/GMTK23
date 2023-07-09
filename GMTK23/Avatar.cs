@@ -30,6 +30,7 @@ internal class Avatar : IGameComponent, ISaveable, IFallable, ICombustable, IWet
     public void Kill()
     {
         AvatarState = null;
+        TargetPos = Transform.Position;
     }
 
     public void NextState()

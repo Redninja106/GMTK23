@@ -49,8 +49,7 @@ internal class Boulder : IGameComponent, ISaveable, IInteractable, IFallable
 
     public void Fall()
     {
-        this.transform.Rotation = Angle.ToRadians(90);
-        this.transform.Position = new(47, 33);
+        this.transform.Position = new(35, 33);
 
         Avatar av = Program.World.Find<Avatar>();
         if (this.GetBounds().Intersects(av.GetBounds()))
