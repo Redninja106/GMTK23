@@ -18,6 +18,9 @@ internal class FlyingCameraController : IGameComponent
 
     public void Update()
     {
+        if (Program.World.FindAll<CameraWaypoint>().Any(w => w.Active))
+            return;
+
         Vector2 delta = Vector2.Zero;
 
         if (Keyboard.IsKeyDown(Key.W))
