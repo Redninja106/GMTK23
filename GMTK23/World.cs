@@ -52,15 +52,18 @@ internal class World
         removeQueue.Enqueue(entity);
     }
 
+    private static RenderLayer[] renderLayers = Enum.GetValues<RenderLayer>();
+
     public void Render(ICanvas canvas)
     {
-        components.Sort((a, b) => Comparer<RenderLayer>.Default.Compare(a.RenderLayer, b.RenderLayer));
-
-        foreach (var e in components)
+        foreach (var renderLayer in renderLayers)
         {
-            canvas.PushState();
-            e.Render(canvas);
-            canvas.PopState();
+            foreach (var e in components.Where(c => c.RenderLayer == renderLayer))
+            {
+                canvas.PushState();
+                e.Render(canvas);
+                canvas.PopState();
+            }
         }
     }
 
